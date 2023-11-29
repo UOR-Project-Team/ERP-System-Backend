@@ -1,5 +1,4 @@
 const adduserModel = require('../models/AdduserModel');
-const bcrypt = require('bcrypt')
 const {hashPassword} = require('./PassowrdController')
 
 const addUser = async(req, res) => {
