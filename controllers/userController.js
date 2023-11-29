@@ -1,9 +1,16 @@
 const userModel = require('../models/userModel');
 
 const createUser = (req, res) => {
-  const { username, age, password } = req.body;
+  // const { username, age, password } = req.body;
 
-  const userData = { username, age, password };
+  // const userData = { username, age, password };
+      //another Approach
+  const userData = {
+    username: req.body.username,
+    age: req.body.age,
+    password: req.body.password
+  };
+  
 
   userModel.createUser(userData, (err, results) => {
     if (err) {
