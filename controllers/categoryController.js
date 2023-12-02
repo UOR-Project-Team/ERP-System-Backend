@@ -2,15 +2,19 @@ const categoryModel = require('../models/categoryModel');
 
 const createCategory = (req, res) => {
   const { description } = req.body;
-    console.log("hello");
+   // console.log("hello");
   const categoryData = { description };
 
   categoryModel.createCategory(categoryData, (err, results) => {
     if (err) {
       console.error('Error creating Category:', err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Error creating categoty' });
+    }else if(results && results.insertId){
+      res.status(201).json({ message: 'Category created successfully', id: results.insertId });
+    }else{
+      return res.status(500).json({ error: 'Internal Server Error222' });
     }
-    res.status(201).json({ message: 'Category created successfully', id: results.id });
+    
   });
 };
 
