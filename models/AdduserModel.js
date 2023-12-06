@@ -16,4 +16,19 @@ const addUser = (userData, callback) => {
   });
 };
 
-module.exports = { addUser };
+
+
+const selectUser = (userID, callback) => {
+  const id = userID;
+
+  const query = 'SELECT * FROM users WHERE ID = ?';
+
+  db.query(query, id, (err, data) => {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, data);
+  });
+};
+
+module.exports = { addUser,selectUser };
