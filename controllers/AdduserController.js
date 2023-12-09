@@ -1,8 +1,5 @@
 const adduserModel = require('../models/AdduserModel');
-const bcrypt = require('bcrypt')
 const {hashPassword} = require('./PasswordController')
-
-
 
 
 const addUser = async(req, res) => {
@@ -43,24 +40,6 @@ const addUser = async(req, res) => {
 
 };
 
-const selectuser= async(req, res)=>{
-  try{
 
-       const userID = req.params.id;
 
-    adduserModel.selectUser(userID, (err, results) => {
-             if (err) {
-                  console.error('Error getting user:', err);
-                  return res.status(500).json({ error: 'Error getting user id' });
-             }else if (results && results.length >0) {
-                  res.status(201).json({ message: 'successfull', user: results });
-             }else{
-                  return res.status(500).json({ error: 'Internal Server ID' });
-            }
-     });
-}catch(e){
- console.log(e);
-}
-}
-
-module.exports = { addUser,selectuser };
+module.exports = { addUser};
