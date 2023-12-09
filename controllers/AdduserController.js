@@ -26,9 +26,13 @@ const addUser = async(req, res) => {
   adduserModel.addUser(userData, (err, results) => {
     if (err) {
       console.error('Error creating user:', err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Error Creating User' });
+    }else if(results && results.insertId){
+      res.status(201).json({ message: 'User created successfully', userId: results.insertId });
+    }else{
+      return res.status(501).json({ error: 'Internal Server Error' });
     }
-    res.status(201).json({ message: 'User created successfully', userId: results.insertId });
+    
   });
 
   }catch(e){
