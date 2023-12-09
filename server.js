@@ -4,7 +4,6 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const adduserRoutes = require('./routes/AdduserRoute');
 const loginRoute = require('./routes/LoginRoute');
-const loginRoute = require('./routes/LoginRoute');
 
 const app = express();
 app.use(cors());
