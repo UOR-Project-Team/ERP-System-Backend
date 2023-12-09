@@ -5,18 +5,19 @@ const {hashPassword} = require('./PassowrdController')
 const addUser = async(req, res) => {
 
     try{
-    const password = req.body.Password.toString();
+    const password = req.body.password.toString();
     const hash =await hashPassword(password)
     
 
     const userData = {
-        Fullname: req.body.Fullname,
-        email: req.body.Email,
-        username: req.body.Username,
+        Fullname: req.body.fullname,
+        email: req.body.email,
+        username: req.body.username,
         password: hash,
         NIC:req.body.NIC,
-        jobrole: req.body.JobRole,
-        mobileno: req.body.MobileNo,
+        jobrole: req.body.jobroleobRole,
+        mobileno: req.body.mobileNo,
+        mobileno2: req.body.mobileNo2,
         address: req.body.Address,
         city: req.body.City,
         Status: req.body.Status
@@ -29,7 +30,7 @@ const addUser = async(req, res) => {
       console.error('Error creating user:', err);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
-    res.status(201).json({ message: 'User created successfully', userId: results.insertId });
+    res.status(200).json({ message: 'User created successfully', userId: results.insertId });
   });
 
   }catch(e){

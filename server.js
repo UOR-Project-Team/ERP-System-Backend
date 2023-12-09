@@ -1,11 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const adduserRoutes = require('./routes/AdduserRoute');
 const loginRoute = require('./routes/LoginRoute');
 
 const app = express();
-const port = 3000;
+app.use(cors());
+const port = 8081;
 
 app.use(express.json());
 
