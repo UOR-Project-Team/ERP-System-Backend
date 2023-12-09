@@ -1,25 +1,41 @@
 const LoginModel = require('../models/LoginModel');
-const {hashPassword} = require('./PassowrdController')
+const {hashPassword} = require('./PasswordController')
+const bcrypt = require('bcrypt');
 
 const loginUser = async(req, res) => {
 
-    const password = req.body.Password.toString();
-    const hash =await hashPassword(password)
- 
-      //another Approach
-  const userData = {
-    username: req.body.Username,
-    password: hash
-  };
-  
-
-  LoginModel.loginUser(userData, (err, results) => {
-    if (err) {
-      console.error('Error creating user:', err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    res.status(201).json({ message: 'User Authentication successfully', userId: results.insertId });
-  });
+    try {
+        const password = req.body.Password.toString();
+    
+        const userData = {
+          username: req.body.Username
+        };
+    
+        LoginModel.loginUser(userData, (err, results) => {
+          if (err) {
+            console.error('Error Authenticating User:', err);
+            return res.status(500).json({ error: 'Error Authenticating User' });
+          } else if (results.length > 0) { // Check if there are any matching users in results
+            const storedHash = results[0].Password; //getting Database value 
+    
+            bcrypt.compare(password, storedHash, (compareErr, compareResult) => {
+              if (compareErr) {
+                return res.status(500).json({ error: 'Error Authenticating User' });
+              }
+              if (compareResult) {
+                res.status(200).json({ message: 'User Authenticated successfully', user: results[0] });
+              } else {
+                res.status(401).json({ error: 'Invalid Password' });
+              }
+            });
+          } else {
+            res.status(401).json({ error: 'Invalid credentials 2' });
+          }
+        });
+      } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
 };
 
 module.exports = {loginUser}

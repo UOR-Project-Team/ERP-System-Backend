@@ -1,11 +1,15 @@
 const adduserModel = require('../models/AdduserModel');
 const bcrypt = require('bcrypt')
-const {hashPassword} = require('./PassowrdController')
+const {hashPassword} = require('./PasswordController')
+
+
+
 
 const addUser = async(req, res) => {
 
     try{
-    const password = req.body.password.toString();
+
+      const password = req.body.Password.toString();
     const hash =await hashPassword(password)
     
 
@@ -22,21 +26,41 @@ const addUser = async(req, res) => {
         city: req.body.City,
         Status: req.body.Status
       };
-    
 
-
-  adduserModel.addUser(userData, (err, results) => {
-    if (err) {
-      console.error('Error creating user:', err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    res.status(200).json({ message: 'User created successfully', userId: results.insertId });
-  });
-
+       adduserModel.addUser(userData, (err, results) => {
+                if (err) {
+                     console.error('Error creating useriD:', err);
+                     return res.status(500).json({ error: 'Error creating userID' });
+                }else if (results && results.insertId) {
+                     res.status(201).json({ message: 'User created successfullyID', userId: results.insertId });
+                }else{
+                     return res.status(500).json({ error: 'Internal Server ID' });
+               }
+        });
   }catch(e){
     console.log(e);
   }
 
 };
 
-module.exports = { addUser };
+const selectuser= async(req, res)=>{
+  try{
+
+       const userID = req.params.id;
+
+    adduserModel.selectUser(userID, (err, results) => {
+             if (err) {
+                  console.error('Error getting user:', err);
+                  return res.status(500).json({ error: 'Error getting user id' });
+             }else if (results && results.length >0) {
+                  res.status(201).json({ message: 'successfull', user: results });
+             }else{
+                  return res.status(500).json({ error: 'Internal Server ID' });
+            }
+     });
+}catch(e){
+ console.log(e);
+}
+}
+
+module.exports = { addUser,selectuser };
