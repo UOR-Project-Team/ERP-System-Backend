@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt');
 const loginUser = async(req, res) => {
 
     try {
-        const password = req.body.Password.toString();
+        const password = req.body.password.toString();
     
         const userData = {
-          username: req.body.Username
+          username: req.body.username
         };
     
         LoginModel.loginUser(userData, (err, results) => {

@@ -11,7 +11,7 @@ const port = 8081;
 
 app.use(express.json());
 
-app.use('/', loginRoute)
+app.use('', loginRoute)
 app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
 app.use('/user', adduserRoutes);
