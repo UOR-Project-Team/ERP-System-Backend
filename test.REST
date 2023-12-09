@@ -1,0 +1,15 @@
+POST http://localhost:3000/category/create
+Content-Type: application/json
+
+{
+    "description":"jeewa"
+}
+###
+POST http://localhost:3000/users/create
+Content-Type: application/json
+
+{
+    "username":"hello",
+    "age":"22",
+    "password":"qweqw"
+}
