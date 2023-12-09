@@ -29,7 +29,7 @@ const loginUser = async(req, res) => {
               }
             });
           } else {
-            res.status(401).json({ error: 'Invalid credentials 2' });
+            res.status(401).json({ error: 'Invalid credentials' });
           }
         });
       } catch (error) {
