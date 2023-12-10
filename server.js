@@ -4,6 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const adduserRoutes = require('./routes/AdduserRoute');
 const loginRoute = require('./routes/LoginRoute');
+const supplierRoute = require('./routes/SupplierRoute')
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use('', loginRoute)
 app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
 app.use('/user', adduserRoutes);
+app.use('/supplier',supplierRoute)
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
