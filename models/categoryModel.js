@@ -4,8 +4,8 @@ const db = require('../dbConfig');
 const createCategory = (categoryData, callback) => {
   const { description } = categoryData;
    
-  const query = 'INSERT INTO category(description) values(?)';
-  db.query(query, description, (err, results) => {
+  const query = "INSERT INTO Product_Category (Description) VALUES (?)";
+  db.query(query, [description], (err, results) => {
     if (err) {
       return callback(err, null);
     }

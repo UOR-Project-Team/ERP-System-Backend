@@ -1,6 +1,6 @@
 const db = require('../dbConfig');
 
-const Showuser = (req, res)=>{
+const Showsupplier = (req, res)=>{
 
     const sql = "select * from supplier";
 
@@ -9,7 +9,7 @@ const Showuser = (req, res)=>{
             console.error('Error Supplier', err);
             return res.status(500).json({ error: 'Error Selecting Supplier' });
        }else if (results) {
-            res.status(201).json({ message: 'Supplier Info successfully', Supplier: results});
+            res.status(200).json({ message: 'Supplier Info successfully', Supplier: results});
        }else{
             return res.status(500).json({ error: 'Internal Server' });
       }
@@ -17,4 +17,4 @@ const Showuser = (req, res)=>{
     });
 }
 
-module.exports = {Showuser}
+module.exports = {Showsupplier}
