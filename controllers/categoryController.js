@@ -1,7 +1,9 @@
 const categoryModel = require('../models/categoryModel');
 
 const createCategory = (req, res) => {
-  const { description } = req.body;
+
+  const {Category} = req.body;
+  const { description } = Category;
    // console.log("hello");
   const categoryData = { description };
 
