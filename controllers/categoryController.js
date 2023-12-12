@@ -1,16 +1,11 @@
 const categoryModel = require('../models/categoryModel');
 
 const createCategory = ((req, res) => {
-//  // const Description = req.body.Description;
+
    const { Description } = req.body;
-// //    // console.log("hello");
- const categoryData = { Description };
+   const categoryData = { Description };
 
-  // const categoryData = {
-  //   category: req.body.Description
-  // };
-
-  categoryModel.createCategory(categoryData, (err, results) => {
+   categoryModel.createCategory(categoryData, (err, results) => {
     if (err) {
       console.error('Error creating Category:', err);
       return res.status(500).json({ error: 'Error creating categoty' });
