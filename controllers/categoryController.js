@@ -18,4 +18,21 @@ const createCategory = (req, res) => {
   });
 };
 
-module.exports = { createCategory };
+
+
+const getAllCategories = async (req, res) => {
+  try {
+    
+    const categories = await categoryModel.getAllCategories();
+    res.json(categories);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
+module.exports = { createCategory, getAllCategories };
