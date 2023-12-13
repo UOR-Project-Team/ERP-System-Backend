@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt');
 const loginUser = async(req, res) => {
 
     try {
-        const password = req.body.Password.toString();
+        const password = req.body.password.toString();
     
         const userData = {
-          username: req.body.Username
+          username: req.body.username
         };
     
         LoginModel.loginUser(userData, (err, results) => {
@@ -29,7 +29,9 @@ const loginUser = async(req, res) => {
               }
             });
           } else {
-            res.status(401).json({ error: 'Invalid credentials 2' });
+
+            res.status(401).json({ error: 'Invalid credentials' });
+
           }
         });
       } catch (error) {

@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const adduserRoutes = require('./routes/AdduserRoute');
@@ -15,8 +16,7 @@ const port = 8081;
 app.use(express.json());
 
 
-
-app.use('/', loginRoute)
+app.use('/',loginRoute)
 app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
 app.use('/user', adduserRoutes);
