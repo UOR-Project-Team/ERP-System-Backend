@@ -20,6 +20,7 @@ app.use('/',loginRoute)
 app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
 app.use('/user', adduserRoutes);
+app.use('/supplier',supplierRoute);
 app.use('/supplier',supplierRoute)
 app.use('/item', itemRoutes);
 app.use('/unit', unitRoute);
