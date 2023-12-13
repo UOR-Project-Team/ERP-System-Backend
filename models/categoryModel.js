@@ -26,4 +26,6 @@ const showCategory = (callback) => {
   });
 };
 
-module.exports = { createCategory , showCategory };
+
+
+module.exports = { createCategory , showCategory};
