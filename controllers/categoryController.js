@@ -33,5 +33,22 @@ const showCategory = (req, res) => {
   });
 };
 
-module.exports = { createCategory , showCategory};
+const deleteCategory = (req, res) => {
+  const categoryId = req.params.id;
+
+ categoryModel.deleteCategory(categoryId, (err, results) => {
+    if (err) {
+      console.error('Error deleting category:', err);
+      return res.status(500).json({ error: 'Error deleting category' });
+    }
+
+    if (results.affectedRows > 0) {
+      res.status(200).json({ message: 'Category deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Category not found' });
+    }
+  });
+};
+
+module.exports = { createCategory , showCategory , deleteCategory};
 
