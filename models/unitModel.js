@@ -5,7 +5,7 @@ const createUnit = (unitData, callback) => {
 
   const {description, si} = unitData;
    
-  const query = "INSERT INTO product_unit (Description,SI) VALUES (?,?)";
+  const query = "INSERT INTO product_unit (Description, SI) VALUES (?, ?)";
   const values = [
     description,si
   ]

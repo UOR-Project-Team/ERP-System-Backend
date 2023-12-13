@@ -1,12 +1,15 @@
-const categoryModel = require('../models/categoryModel');
+const categoryModel = require('../models/unitModel');
 
 const createunit = (req, res) => {
 
-  const categoryData = {
-    unit: req.body.Unit
-  };
+  const { unitId, description } = req.body;
+  const unitData = { unitId, description };
+  
+  // const categoryData = {
+  //   unit: req.body.Unit
+  // };
 
-  categoryModel.createUnit(categoryData, (err, results) => {
+  categoryModel.createUnit(unitData, (err, results) => {
     if (err) {
       console.error('Error creating Unit:', err);
       return res.status(500).json({ error: 'Error creating Unit' });
