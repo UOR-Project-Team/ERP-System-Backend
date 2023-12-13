@@ -2,9 +2,6 @@ const adduserModel = require('../models/AdduserModel');
 const bcrypt = require('bcrypt')
 const {hashPassword} = require('./PasswordController')
 
-
-
-
 const addUser = async(req, res) => {
 
     try{
