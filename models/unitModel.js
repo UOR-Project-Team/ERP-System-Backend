@@ -17,4 +17,28 @@ const createunit = (categoryData, callback) => {
   });
 };
 
-module.exports = { createunit };
+
+
+const retrieveUnits = (req, res)=>{
+
+  const sql = "select * from product_unit";
+
+  db.query(sql, (err,results)=>{
+      if (err) {
+          console.error('Error unit', err);
+          return res.status(500).json({ error: 'Error Selecting unit' });
+     }else if (results) {
+          res.status(200).json({ message: 'Unit array passed successfully', units: results});
+     }else{
+          return res.status(500).json({ error: 'Internal Server' });
+    }
+
+  });
+}
+
+
+22-s12-t02-view-supplier-backend-development
+
+
+module.exports = {retrieveUnits,retrieveUnits};
+

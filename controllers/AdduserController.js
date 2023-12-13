@@ -1,7 +1,6 @@
 const adduserModel = require('../models/AdduserModel');
 const {hashPassword} = require('./PasswordController')
 
-
 const addUser = async(req, res) => {
 
     try{
@@ -38,7 +37,6 @@ const addUser = async(req, res) => {
   }
 
 };
-
 
 
 module.exports = { addUser};

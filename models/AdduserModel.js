@@ -16,5 +16,4 @@ const addUser = (userData, callback) => {
   });
 };
 
-
 module.exports = { addUser };
