@@ -26,5 +26,16 @@ const showCategory = (callback) => {
   });
 };
 
+const deleteCategory = (categoryId, callback) => {
+  const sql = 'DELETE FROM Product_Category WHERE ID = ?';
+  db.query(sql, [categoryId], (err, results) => {
+    if (err) {
+      console.error('Error deleting category:', err);
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
 
-module.exports = { createCategory , showCategory };
+
+module.exports = { createCategory , showCategory ,deleteCategory };
