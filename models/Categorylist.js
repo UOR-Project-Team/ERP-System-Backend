@@ -17,4 +17,4 @@ const Showcategory = (req, res)=>{
     });
 }
 
-module.exports = {Showcategory}
+module.exports = {Showcategory};
