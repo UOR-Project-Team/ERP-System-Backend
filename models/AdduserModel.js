@@ -8,11 +8,11 @@ const addUser = (userData, callback) => {
     Fullname,email,username,password,NIC,jobrole,mobileno,address,city,Status
   ]
 
-  db.query(query, values, (err, results) => {
+  db.query(query, values, (err, data) => {
     if (err) {
       return callback(err, null);
     }
-    return callback(null, results);
+    return callback(null, data);
   });
 };
 
