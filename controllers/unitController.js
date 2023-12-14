@@ -1,4 +1,4 @@
-const categoryModel = require('../models/unitModel');
+const UnitModel = require('../models/unitModel');
 
 const createunit = (req, res) => {
 
@@ -9,7 +9,7 @@ const createunit = (req, res) => {
   //   unit: req.body.Unit
   // };
 
-  categoryModel.createUnit(unitData, (err, results) => {
+  UnitModel.createUnit(unitData, (err, results) => {
     if (err) {
       console.error('Error creating Unit:', err);
       return res.status(500).json({ error: 'Error creating Unit' });
@@ -22,4 +22,22 @@ const createunit = (req, res) => {
   });
 };
 
-module.exports = { createunit };
+
+const deleteUnit = (req, res) => {
+  const unitId = req.params.id;
+
+  UnitModel.deleteUnit(unitId, (err, results) => {
+    if (err) {
+      console.error('Error deleting unit:', err);
+      return res.status(500).json({ error: 'Error deleting unit' });
+    }
+
+    if (results.affectedRows > 0) {
+      res.status(200).json({ message: 'Unit deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Unit not found' });
+    }
+  });
+};
+
+module.exports = { deleteUnit,createunit };
