@@ -38,7 +38,7 @@ const retrieveUnits = (req, res)=>{
 
 
 const deleteUnit = (unitId, callback) => {
-  const sql = 'DELETE FROM product WHERE ID = ?';
+  const sql = 'DELETE FROM product_unit WHERE ID = ?';
   db.query(sql, [unitId], (err, results) => {
     if (err) {
       console.error('Error deleting unit:', err);
