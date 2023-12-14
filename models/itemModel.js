@@ -16,4 +16,15 @@ const addItem = (itemData, callback) => {
     });
   };
   
-  module.exports = { addItem };
+  const deleteItem = (itemId, callback) => {
+    const sql = 'DELETE FROM product WHERE ID = ?';
+    db.query(sql, [itemId], (err, results) => {
+      if (err) {
+        console.error('Error deleting item:', err);
+        return callback(err, null);
+      }
+      return callback(null, results);
+    });
+  };
+
+  module.exports = { addItem, deleteItem };

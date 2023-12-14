@@ -1,17 +1,20 @@
-const categoryModel = require('../models/categoryModel');
+const categoryModel = require('../models/unitModel');
 
 const createunit = (req, res) => {
 
-  const categoryData = {
-    category: req.body.Category
-  };
+  const { Description, SI } = req.body;
+  const unitData = {Description, SI };
+  
+  // const categoryData = {
+  //   unit: req.body.Unit
+  // };
 
-  categoryModel.createunit(categoryData, (err, results) => {
+  categoryModel.createUnit(unitData, (err, results) => {
     if (err) {
-      console.error('Error creating Category:', err);
-      return res.status(500).json({ error: 'Error creating categoty' });
+      console.error('Error creating Unit:', err);
+      return res.status(500).json({ error: 'Error creating Unit' });
     }else if(results && results.insertId){
-      res.status(201).json({ message: 'Category created successfully', id: results.insertId });
+      res.status(201).json({ message: 'Unit created successfully', id: results.insertId });
     }else{
       return res.status(500).json({ error: 'Internal Server Error222' });
     }
