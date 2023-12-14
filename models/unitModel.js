@@ -3,11 +3,11 @@ const db = require('../dbConfig');
 const createUnit = (unitData, callback) => {
   //const { description } = categoryData;
 
-  const {description, si} = unitData;
+  const {Description, SI} = unitData;
    
   const query = "INSERT INTO product_unit (Description, SI) VALUES (?, ?)";
   const values = [
-    description,si
+    Description,SI
   ]
   db.query(query, values, (err, results) => {
     if (err) {

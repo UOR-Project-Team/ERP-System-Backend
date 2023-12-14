@@ -2,8 +2,8 @@ const categoryModel = require('../models/unitModel');
 
 const createunit = (req, res) => {
 
-  const { unitId, description } = req.body;
-  const unitData = { unitId, description };
+  const { Description, SI } = req.body;
+  const unitData = {Description, SI };
   
   // const categoryData = {
   //   unit: req.body.Unit
