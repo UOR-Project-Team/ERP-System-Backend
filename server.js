@@ -9,6 +9,8 @@ const itemRoutes = require('./routes/ItemRoute');
 const unitRoute = require('./routes/UnitRoute');
 const customerRoute = require('./routes/route.customer');
 
+require('dotenv').config();
+
 const app = express();
 app.use(cors());
 const port = 8081;
