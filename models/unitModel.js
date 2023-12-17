@@ -72,6 +72,24 @@ const retrieveUnitById = (unitId, callback) => {
 };
 
 
+const updateUnit = (unitData,unitId,callback) => {
+  //const { description } = categoryData;
 
-module.exports = {createUnit,retrieveUnits,deleteUnit,retrieveUnitById};
+  const {Description, SI} = unitData;
+   
+  const query = "UPDATE product_unit SET Description=?, SI=? WHERE ID = ?";
+  const values = [
+    Description,SI,unitId
+  ]
+  db.query(query, values, (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
+
+
+
+module.exports = {createUnit,retrieveUnits,deleteUnit,retrieveUnitById,updateUnit};
 

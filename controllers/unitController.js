@@ -56,4 +56,27 @@ const getUnitById = (req, res) => {
   });
 };
 
-module.exports = { deleteUnit,createunit, getUnitById };
+const updateUnit = (req, res) => {
+  const unitId = req.params.id
+  const { Description, SI} = req.body;
+  
+  const unitData = {Description, SI};
+
+  UnitModel.updateUnit(unitData, unitId, (err, results) => {
+    if (err) {
+      console.error('Error Updating Unit:', err);
+      return res.status(500).json({ error: 'Error Updating Unit' });
+    }else if(results && results.insertId){
+      res.status(201).json({ message: 'Unit Updated Successfully', id: results.insertId });
+    }else{
+      return res.status(500).json({ error: 'Internal Server Error222' });
+    }
+    
+  });
+};
+
+
+
+
+
+module.exports = { deleteUnit,createunit, getUnitById, updateUnit };
