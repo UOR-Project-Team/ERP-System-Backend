@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const loginUser = async (req, res) => {
 
     try {
-
         const username = req.body.username;
         const password = req.body.password.toString();
     

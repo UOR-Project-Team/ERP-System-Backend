@@ -1,5 +1,21 @@
-// userModel.js
 const db = require('../dbConfig');
+
+const createUnit = (unitData, callback) => {
+  //const { description } = categoryData;
+
+  const {Description, SI} = unitData;
+   
+  const query = "INSERT INTO product_unit (Description, SI) VALUES (?, ?)";
+  const values = [
+    Description,SI
+  ]
+  db.query(query, values, (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
 
 
 
@@ -21,8 +37,20 @@ const retrieveUnits = (req, res)=>{
 }
 
 
+const deleteUnit = (unitId, callback) => {
+  const sql = 'DELETE FROM product_unit WHERE ID = ?';
+  db.query(sql, [unitId], (err, results) => {
+    if (err) {
+      console.error('Error deleting unit:', err);
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
 
 
 
-module.exports = {retrieveUnits};
+
+
+module.exports = {createUnit,retrieveUnits,deleteUnit};
 

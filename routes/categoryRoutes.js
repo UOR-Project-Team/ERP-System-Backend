@@ -5,8 +5,8 @@ const categoryModel= require('../models/categoryModel');
 
 router.post('/create', categoryController.createCategory);
 router.get('/show', categoryController.showCategory);
-
-router.get('/get', categoryModel.retrieveCategories);
-
+router.delete('/delete/:id', categoryController.deleteCategory);
+router.get('/show/:id',categoryController.getCategoryById);
+router.put('/update/:id', categoryController.updateCategory);
 
  module.exports = router;
