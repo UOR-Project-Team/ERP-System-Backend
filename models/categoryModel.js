@@ -37,5 +37,32 @@ const deleteCategory = (categoryId, callback) => {
   });
 };
 
+const updateCategory = (categoryId, categoryData, callback) => {
+  const { Description } = categoryData;
 
-module.exports = { createCategory , showCategory ,deleteCategory };
+  const sql = 'UPDATE Product_Category SET Description = ? WHERE ID = ?';
+  db.query(sql, [Description, categoryId], (err, results) => {
+    if (err) {
+      console.error('Error updating category:', err);
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
+
+const getCategoryById = (categoryId, callback) => {
+  const sql = 'SELECT * FROM Product_Category WHERE ID = ?';
+  db.query(sql, [categoryId], (err, results) => {
+    if (err) {
+      console.error('Error selecting category by ID:', err);
+      return callback(err, null);
+    }
+    if (results.length === 0) {
+      return callback({ message: 'Category not found' }, null);
+    }
+    return callback(null, results[0]);
+  });
+};
+
+
+module.exports = { createCategory , showCategory ,deleteCategory, updateCategory ,getCategoryById };

@@ -49,6 +49,42 @@ const deleteCategory = (req, res) => {
     }
   });
 };
+const updateCategory = (req, res) => {
+  const categoryId = req.params.id;
+  const { Description } = req.body;
+  const categoryData = { Description };
 
-module.exports = { createCategory , showCategory , deleteCategory};
+  categoryModel.updateCategory(categoryId, categoryData, (err, results) => {
+    if (err) {
+      console.error('Error updating category:', err);
+      return res.status(500).json({ error: 'Error updating category' });
+    }
+
+    if (results.affectedRows > 0) {
+      res.status(200).json({ message: 'Category updated successfully', id: categoryId, Description });
+    } else {
+      res.status(404).json({ message: 'Category not found' });
+    }
+  });
+};
+
+const getCategoryById = (req, res) => {
+  const categoryId = req.params.id;
+
+  categoryModel.getCategoryById(categoryId, (err, result) => {
+    if (err) {
+      console.error('Error getting category by ID:', err);
+      return res.status(500).json({ error: 'Error getting category by ID' });
+    }
+
+    if (result) {
+      res.status(200).json({ message: 'Category retrieved successfully', category: result });
+    } else {
+      res.status(404).json({ message: 'Category not found' });
+    }
+  });
+};
+
+
+module.exports = { createCategory , showCategory , deleteCategory , updateCategory ,getCategoryById};
 
