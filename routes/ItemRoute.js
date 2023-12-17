@@ -10,4 +10,6 @@ router.get('/show',showItemInfo.Showitem);
 
 router.delete('/delete/:id', additemController.deleteItem);
 
+router.put('/update/:id', additemController.updateItem);
+
 module.exports = router;

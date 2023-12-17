@@ -50,7 +50,28 @@ const deleteUnit = (unitId, callback) => {
 
 
 
+const retrieveUnitById = (unitId, callback) => {
+  const sql = "SELECT * FROM product_unit WHERE ID = ?";
+  
+
+  db.query(sql, [unitId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving unit by ID', err);
+      return callback(err, null);
+    }
+
+    if (results.length === 0) {
+      //console.log(unitId);//Testing
+      return callback(null, null); // Unit not found
+      
+    }
+
+    const unit = results[0];
+    callback(null, unit);
+  });
+};
 
 
-module.exports = {createUnit,retrieveUnits,deleteUnit};
+
+module.exports = {createUnit,retrieveUnits,deleteUnit,retrieveUnitById};
 

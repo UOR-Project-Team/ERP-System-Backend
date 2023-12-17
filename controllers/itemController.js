@@ -37,4 +37,24 @@ const deleteItem = (req, res) => {
 };
 
 
-module.exports = { Additem,deleteItem };
+const updateItem = (req, res) => {
+  const itemId = req.params.id
+  const { code, itemName, categoryId, unitId } = req.body;
+  
+  const itemData = { code, itemName, categoryId, unitId };
+
+  ItemModel.updateItem(itemData, itemId, (err, results) => {
+    if (err) {
+      console.error('Error Updating Item:', err);
+      return res.status(500).json({ error: 'Error Updating Item' });
+    }else if(results && results.insertId){
+      res.status(201).json({ message: 'Item Updated Successfully', id: results.insertId });
+    }else{
+      return res.status(500).json({ error: 'Internal Server Error222' });
+    }
+    
+  });
+};
+
+
+module.exports = { Additem,deleteItem, updateItem };

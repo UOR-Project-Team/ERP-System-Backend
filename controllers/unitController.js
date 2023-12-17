@@ -40,4 +40,20 @@ const deleteUnit = (req, res) => {
   });
 };
 
-module.exports = { deleteUnit,createunit };
+const getUnitById = (req, res) => {
+  const unitId  = req.params.id;
+  console.log(unitId);//testing
+  UnitModel.retrieveUnitById(unitId, (err, unit) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error retrieving unit by ID' });
+    }
+
+    if (!unit) {
+      return res.status(404).json({ error: 'Unit not found' });
+    }
+
+    res.status(200).json({ message: 'Unit retrieved successfully', unit });
+  });
+};
+
+module.exports = { deleteUnit,createunit, getUnitById };
