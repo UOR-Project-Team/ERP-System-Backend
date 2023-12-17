@@ -40,4 +40,43 @@ const deleteUnit = (req, res) => {
   });
 };
 
-module.exports = { deleteUnit,createunit };
+const getUnitById = (req, res) => {
+  const unitId  = req.params.id;
+  console.log(unitId);//testing
+  UnitModel.retrieveUnitById(unitId, (err, unit) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error retrieving unit by ID' });
+    }
+
+    if (!unit) {
+      return res.status(404).json({ error: 'Unit not found' });
+    }
+
+    res.status(200).json({ message: 'Unit retrieved successfully', unit });
+  });
+};
+
+const updateUnit = (req, res) => {
+  const unitId = req.params.id
+  const { Description, SI} = req.body;
+  
+  const unitData = {Description, SI};
+
+  UnitModel.updateUnit(unitData, unitId, (err, results) => {
+    if (err) {
+      console.error('Error Updating Unit:', err);
+      return res.status(500).json({ error: 'Error Updating Unit' });
+    }else if(results && results.insertId){
+      res.status(201).json({ message: 'Unit Updated Successfully', id: results.insertId });
+    }else{
+      return res.status(500).json({ error: 'Internal Server Error222' });
+    }
+    
+  });
+};
+
+
+
+
+
+module.exports = { deleteUnit,createunit, getUnitById, updateUnit };
