@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const categoryRoutes = require('./routes/categoryRoutes');
-//const adduserRoutes = require('./routes/UserRoute');
 const userroute = require('./routes/Router.User')
 const loginRoute = require('./routes/LoginRoute');
 const supplierRoute = require('./routes/SupplierRoute')
@@ -18,7 +17,6 @@ app.use(express.json());
 
 app.use('/',loginRoute)
 app.use('/category', categoryRoutes)
-//app.use('/user', adduserRoutes);
 app.use('/user',userroute);
 app.use('/supplier',supplierRoute);
 app.use('/item', itemRoutes);
