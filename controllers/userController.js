@@ -1,3 +1,4 @@
+/*
 const userModel = require('../models/UserModel');
 const {hashPassword} = require('./PasswordController')
 
@@ -21,7 +22,7 @@ const addUsercontroller = async(req, res) => {
         city: req.body.city,
       };
 
-       userModel.addUser(userData, (err, results) => {
+       userModel.AddUser(userData, (err, results) => {
                 if (err) {
                      console.error('Error creating user', err);
                      return res.status(500).json({ error: 'Error creating user' });
@@ -39,7 +40,7 @@ const addUsercontroller = async(req, res) => {
 
 const GetAlluserController = async (req, res) => {
   try {
-    const results = await userModel.getAllUsers(); 
+    const results = await userModel.GetAllUsers(); 
     
     if (results && results.length > 0) {
       res.status(200).json({ message: 'Users retrieved successfully', users: results });
@@ -50,13 +51,14 @@ const GetAlluserController = async (req, res) => {
     console.error('Error retrieving users', error);
     res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
-}
+};
+
 
 const GetUserByIdController = async (req, res) => {
   const userId = req.params.id; // Assuming the user ID is passed as a parameter in the URL
 
   try {
-    const user = await userModel.getUserById(userId);
+    const user = await userModel.GetUserById(userId);
 
     if (user) {
       res.status(200).json({ message: 'User retrieved successfully', user });
@@ -69,14 +71,19 @@ const GetUserByIdController = async (req, res) => {
   }
 }
 
+
+
+
 const UpdateUserController = async (req, res) => {
-  const userId = req.params.id; //from url
-  const updatedUserData = req.body; //from frontend
-
+  
   try {
-    const affectedRows = await userModel.UpdateUser(userId, updatedUserData);
+  const userId = req.params.id; //from url
+  const newData = req.body; //from frontend
 
-    if (affectedRows > 0) {
+  
+    const result = await userModel.UpdateUser(userId, newData);
+
+    if (result > 0) {
       res.status(200).json({ message: 'User updated successfully' });
     } else {
       res.status(404).json({ error: 'No user found or no changes made' });
@@ -88,12 +95,16 @@ const UpdateUserController = async (req, res) => {
 };
 
 
-const deleteUserController = async (req, res) => {
+const DeleteUserController = async (req, res) => {
   const userId = req.params.ID; 
 
   try {
-    const result = await userModel.DeleteUser(userId);
-    res.status(200).json({ message: `${result} user deleted successfully` });
+    const result = await userModel.DeleteUsers(userId);
+    if (result > 0) {
+      res.status(200).json({ message: 'User updated successfully' });
+    } else {
+      res.status(404).json({ error: 'No user found or no changes made' });
+    }
 
   } catch (error) {
     
@@ -102,12 +113,12 @@ const deleteUserController = async (req, res) => {
 };
 
 
-
-
 module.exports = {
   addUsercontroller,
   GetAlluserController,
-  deleteUserController,
+  GetUserByIdController,
+  DeleteUserController,
   UpdateUserController
 };
 
+*/

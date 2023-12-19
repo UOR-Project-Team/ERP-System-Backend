@@ -1,9 +1,9 @@
-const db = require('../dbConfig');
+const db = require('../dbConfig')
 
 const loginUser = (userData, callback) => {
   const {username} = userData;
 
-  const query = "SELECT * FROM users where Username = ? ";
+  const query = "SELECT * FROM user where Username = ? ";
   db.query(query, username, (err, results) => {
     if (err) {
       return callback(err, null);

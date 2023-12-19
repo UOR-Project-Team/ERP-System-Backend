@@ -1,5 +1,4 @@
 const LoginModel = require('../models/LoginModel');
-const {hashPassword} = require('./PasswordController')
 const bcrypt = require('bcrypt');
 
 const loginUser = async(req, res) => {
