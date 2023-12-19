@@ -1,13 +1,13 @@
 const db = require('../dbConfig');
 
-const createunit = (categoryData, callback) => {
+const createUnit = (unitData, callback) => {
   //const { description } = categoryData;
 
-  const {description, si} = categoryData;
+  const {Description, SI} = unitData;
    
-  const query = "INSERT INTO Product_Category (Description,SI) VALUES (?,?)";
+  const query = "INSERT INTO product_unit (Description, SI) VALUES (?, ?)";
   const values = [
-    description,si
+    Description,SI
   ]
   db.query(query, values, (err, results) => {
     if (err) {
@@ -37,8 +37,59 @@ const retrieveUnits = (req, res)=>{
 }
 
 
+const deleteUnit = (unitId, callback) => {
+  const sql = 'DELETE FROM product_unit WHERE ID = ?';
+  db.query(sql, [unitId], (err, results) => {
+    if (err) {
+      console.error('Error deleting unit:', err);
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
 
 
 
-module.exports = {retrieveUnits,retrieveUnits};
+const retrieveUnitById = (unitId, callback) => {
+  const sql = "SELECT * FROM product_unit WHERE ID = ?";
+  
+
+  db.query(sql, [unitId], (err, results) => {
+    if (err) {
+      console.error('Error retrieving unit by ID', err);
+      return callback(err, null);
+    }
+
+    if (results.length === 0) {
+      //console.log(unitId);//Testing
+      return callback(null, null); // Unit not found
+      
+    }
+
+    const unit = results[0];
+    callback(null, unit);
+  });
+};
+
+
+const updateUnit = (unitData,unitId,callback) => {
+  //const { description } = categoryData;
+
+  const {Description, SI} = unitData;
+   
+  const query = "UPDATE product_unit SET Description=?, SI=? WHERE ID = ?";
+  const values = [
+    Description,SI,unitId
+  ]
+  db.query(query, values, (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    return callback(null, results);
+  });
+};
+
+
+
+module.exports = {createUnit,retrieveUnits,deleteUnit,retrieveUnitById,updateUnit};
 

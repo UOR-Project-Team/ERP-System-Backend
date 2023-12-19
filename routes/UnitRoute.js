@@ -1,8 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const unitmodel = require('../models/unitModel');
+const unitController = require('../controllers/unitController');
+const unitmodel = require('../models/unitModel')
 
-//Add create unit router here with path
+router.post('/create', unitController.createunit);
+router.get('/get',unitmodel.retrieveUnits);
+router.get('/get/:id',unitController.getUnitById);
+router.delete('/delete/:id', unitController.deleteUnit);
+router.put('/update/:id', unitController.updateUnit);
 
 
 //router.get('/get', unitmodel.retrieveUnits);
