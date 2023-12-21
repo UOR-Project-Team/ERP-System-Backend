@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
+const categoryRoutes1 = require('./routes/categoryRoutes');
+const userroute = require('./routes/Router.User')
 const categoryRoutes = require('./routes/route.category');
-const adduserRoutes = require('./routes/AdduserRoute');
 const loginRoute = require('./routes/LoginRoute');
 const supplierRoute = require('./routes/route.supplier')
 const itemRoutes = require('./routes/ItemRoute');
@@ -19,9 +19,8 @@ app.use(express.json());
 
 
 app.use('/',loginRoute)
-app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
-app.use('/user', adduserRoutes);
+app.use('/user',userroute);
 app.use('/supplier',supplierRoute);
 app.use('/customer', customerRoute);
 app.use('/item', itemRoutes);
