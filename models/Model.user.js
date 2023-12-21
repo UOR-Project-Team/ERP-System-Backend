@@ -36,7 +36,6 @@ const addUser = async (userData) => {
     try {
       const connection = await db.getConnection();
   
-      // Sample SQL query for insertion
       const { Fullname, email, username, password, NIC, jobrole, contactno, address, city} = userData;
 
     const sqlQuery = 'INSERT INTO user (Fullname, Email, Username, Password, NIC, JobRole, ContactNo, Address, City, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)';
@@ -44,7 +43,7 @@ const addUser = async (userData) => {
       Fullname, email, username, password, NIC, jobrole, contactno, address, city
     ];
   
-      // Execute the insertion query
+      
       const [result,field] = await connection.execute(sqlQuery, values);
   
       // Release the connection back to the pool
@@ -52,6 +51,7 @@ const addUser = async (userData) => {
   
       return result.insertId; // Return the ID of the inserted user
     } catch (error) {
+      console.error('Error inserting user:', error); 
       throw new Error(`Error inserting user: ${error.message}`);
     }
   };

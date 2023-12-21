@@ -30,6 +30,7 @@ const AddUserController = async (req, res)=>{
     try{
         const password = req.body.password.toString();
         const hash =await hashPassword(password);
+        
     
 
     const userData = {
