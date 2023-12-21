@@ -1,0 +1,56 @@
+const db = require('../connection');
+
+const createCustomer = async (data) => {
+  try {
+    const { firstname, lastname, email, nic, contactno, street1, street2, city, country, vatno } = data;
+
+    const query = 'INSERT INTO customer (firstname, lastname, email, nic, contactno, street1, street2, city, country, vatno) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const [results] = await db.execute(query, [firstname, lastname, email, nic, contactno, street1, street2, city, country, vatno]);
+
+    return results.insertId;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getCustomerById = async (id) => {
+  try {
+    const query = 'SELECT * FROM customer WHERE id = ?';
+    const [results] = await db.execute(query, [id]);
+    return results[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getAllCustomers = async () => {
+  try {
+    const query = 'SELECT * FROM customer';
+    const [results] = await db.execute(query);
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const updateCustomer = async (id, data) => {
+  try {
+    const { firstname, lastname, email, nic, contactno, street1, street2, city, country, vatno } = data;
+
+    const query = 'UPDATE customer SET firstname=?, lastname=?, email=?, nic=?, contactno=?, street1=?, street2=?, city=?, country=?, vatno=? WHERE id=?';
+    await db.query(query, [firstname, lastname, email, nic, contactno, street1, street2, city, country, vatno, id]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const deleteCustomer = async (id) => {
+  try {
+    const query = 'DELETE FROM customer WHERE id = ?';
+    await db.query(query, [id]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports = { createCustomer, getCustomerById, getAllCustomers, updateCustomer, deleteCustomer };
