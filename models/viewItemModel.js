@@ -2,7 +2,18 @@ const db = require('../dbConfig');
 
 const Showitem = (req, res)=>{
 
-    const sql = "select * from product";
+    //const sql = "select * from product";
+    const sql= `SELECT
+                    product.*,
+                    product_category.Description AS CategoryName,
+                    product_unit.Description AS UnitName
+                FROM
+                    product
+                    JOIN product_category ON product.Category_ID = product_category.ID
+                    JOIN product_unit ON product.Unit_ID = product_unit.ID
+                ORDER BY
+                    product.code;
+                `
 
     db.query(sql, (err,results)=>{
         if (err) {
