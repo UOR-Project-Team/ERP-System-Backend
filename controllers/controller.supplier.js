@@ -3,14 +3,20 @@ const supplierModel = require('../models/model.supplier');
 
 const createSupplier = async (req, res) => {
   try {
-    const { Fullname, RegistrationNo, Email, ContactNo, FAX , Address, City, Description, VATNo } = req.body;
-    const data = { Fullname, RegistrationNo, Email, ContactNo, FAX , Address, City , Description, VATNo };
+    const { Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country } = req.body;
+    const data = { Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country };
 
     const supplierId = await supplierModel.createSupplier(data);
     res.status(201).json({ message: 'Supplier created successfully', supplierId });
   } catch (err) {
-    console.error('Error creating supplier:', err);
-    res.status(500).json({ error: 'Error occured while creation!' });
+    console.error('Error creating Supplier:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
   }
 };
 
@@ -53,8 +59,14 @@ const updateSupplier = async (req, res) => {
     await supplierModel.updateSupplier(id, data);
     res.status(200).json({ message: 'Supplier updated successfully' });
   } catch (err) {
-    console.error('Error updating supplier:', err);
-    res.status(500).json({ error: 'Error occured while updation!' });
+    console.error('Error creating Supplier:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while Updation!' });
+    }
   }
 };
 
