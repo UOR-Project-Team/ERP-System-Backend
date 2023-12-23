@@ -2,10 +2,10 @@ const db = require('../connection');
 
 const createSupplier = async (supplierData) => {
   try {
-    const { Fullname, RegistrationNo, Email,ContactNo, Fax, Address, City, Description, VatNo } = supplierData;
+    const { Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country  } = supplierData;
 
-    const query = 'INSERT INTO Supplier (Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo, Credit, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0 ,1)';
-    const [results] = await db.execute(query, [Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo]);
+    const query = 'INSERT INTO Supplier (Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country, Credit, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  0 ,1)';
+    const [results] = await db.execute(query, [Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country]);
 
     return results.insertId;
   } catch (err) {
@@ -35,10 +35,10 @@ const getAllSuppliers = async () => {
 
 const updateSupplier = async (supplierId, supplierData) => {
   try {
-    const { Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo } = supplierData;
+    const { Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country } = supplierData;
 
-    const query = 'UPDATE Supplier SET Fullname=?, RegistrationNo=?, Email=?, ContactNo=?, Fax=?, Address=?, City=?, Description=?, VatNo=? WHERE id=?';
-    await db.query(query, [Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo, supplierId]);
+    const query = 'UPDATE Supplier SET Title=?, Fullname=?, Description=?, RegistrationNo=?, VatNo=?, Email=?, ContactNo=?, Fax=?, Street1=?, Street2=?, City=?, Country=? WHERE id=?';
+    await db.query(query, [Title, Fullname, Description, RegistrationNo, VatNo, Email, ContactNo, Fax, Street1, Street2, City, Country, supplierId]);
   } catch (err) {
     throw err;
   }
