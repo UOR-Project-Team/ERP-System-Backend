@@ -29,6 +29,7 @@ const getUserByIDController = async(req, res)=>{
 const AddUserController = async (req, res)=>{
     try{
         const password = req.body.password.toString();
+        
         const hash =await hashPassword(password);
         
     
@@ -77,45 +78,46 @@ const deleteuserByIDcontroller = async(req, res) =>{
     }
 }
 
-const updateUserController = async(req, res)=>{
+const updateUserController = async (req, res) => {
+  const updateid = req.params.id;
+  if (!updateid) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
 
-    const updateid = req.params.id;
-        if (!updateid) {
-            return res.status(400).json({ error: 'Invalid user ID' });
-          }
-    try{
-        
-
-           const password = req.body.password.toString();
-           const hash =await hashPassword(password);
-      
-  
-      const userData = {
-          Fullname: req.body.Fullname,
-          email: req.body.email,
-          username: req.body.username,
-          password: hash,
-          NIC:req.body.NIC,
-          jobrole: req.body.jobrole,
-          contactno: req.body.contactno,
-          address: req.body.address,
-          city: req.body.city,
-          
-        };
-
-        const updateuser = await userModel.updateUser(updateid,userData);
-
-        if (updateuser > 0) {
-            res.status(200).json({ message: 'User Updated successfully', userId: updateid });
-          } else {
-            res.status(404).json({ error: 'Error Updating User' });
-          }
-
-    }catch(error){
-        console.error('Error updating user:', error); // Log the specific error for debugging purposes
-        return res.status(500).json({ error: 'Internal Server Error' });
+  try {
+    let hash = '';
+    const { password } = req.body;
+    if (password) {
+      hash = await hashPassword(password);
     }
-}
+
+    const userData = {
+      Fullname: req.body.Fullname,
+      email: req.body.email,
+      username: req.body.username,
+      NIC: req.body.NIC,
+      jobrole: req.body.jobrole,
+      contactno: req.body.contactno,
+      address: req.body.address,
+      city: req.body.city,
+    };
+
+    if (hash !== '') {
+      userData.password = hash;
+    }
+
+    const updateuser = await userModel.updateUser(updateid, userData);
+
+    if (updateuser > 0) {
+      res.status(200).json({ message: 'User Updated successfully', userId: updateid });
+    } else {
+      res.status(404).json({ error: 'Error Updating User' });
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 const searchUser = async(req, res)=>{
 

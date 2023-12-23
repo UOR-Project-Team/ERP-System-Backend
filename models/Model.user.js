@@ -71,26 +71,30 @@ const addUser = async (userData) => {
     }
   }
 
-  const updateUser = async(id, newuserData)=>{
-    try{
-        const connection = await db.getConnection();
-
-        const { Fullname, email, username,password, NIC, jobrole, contactno, address, city} = newuserData;
-
-        const sqlQuery = 'UPDATE user SET Fullname = ?, Email = ?, Username = ?,Password = ?, NIC = ?, JobRole = ?, ContactNo = ?, Address = ?, City = ? WHERE ID = ?;';
-        const values = [
-            Fullname, email, username,password, NIC, jobrole, contactno, address, city, id
-          ];
-
-          const [result, fields] = await connection.execute(sqlQuery,[Fullname, email, username,password, NIC, jobrole, contactno, address, city, id]);
-            connection.release();
-
-            return result.affectedRows;
-
-    }catch(error){
-        throw new Error(`Error updating user: ${error.message}`);
+  const updateUser = async (id, newuserData) => {
+    try {
+      const connection = await db.getConnection();
+  
+      const { Fullname, email, username, password, NIC, jobrole, contactno, address, city } = newuserData;
+      let sqlQuery = '';
+      let values = [];
+  
+      if (password) {
+        sqlQuery = 'UPDATE user SET Fullname = ?, Email = ?, Username = ?, Password = ?, NIC = ?, JobRole = ?, ContactNo = ?, Address = ?, City = ? WHERE ID = ?;';
+        values = [Fullname, email, username, password, NIC, jobrole, contactno, address, city, id];
+      } else {
+        sqlQuery = 'UPDATE user SET Fullname = ?, Email = ?, Username = ?, NIC = ?, JobRole = ?, ContactNo = ?, Address = ?, City = ? WHERE ID = ?;';
+        values = [Fullname, email, username, NIC, jobrole, contactno, address, city, id];
+      }
+  
+      const [result, fields] = await connection.execute(sqlQuery, values);
+      connection.release();
+  
+      return result.affectedRows;
+    } catch (error) {
+      throw new Error(`Error updating user: ${error.message}`);
     }
-  }
+  };
 
   const searchuser = async(term)=>{
     try{
