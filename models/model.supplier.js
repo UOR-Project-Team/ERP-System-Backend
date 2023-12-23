@@ -2,10 +2,10 @@ const db = require('../connection');
 
 const createSupplier = async (supplierData) => {
   try {
-    const { Fullname, RegistrationNo, Email,ContactNo, FAX, Address, City, Description, VATNo } = supplierData;
+    const { Fullname, RegistrationNo, Email,ContactNo, Fax, Address, City, Description, VatNo } = supplierData;
 
-    const query = 'INSERT INTO Supplier (Fullname, RegistrationNo, Email, ContactNo, FAX, Address, City, Description, VATNo, Credit, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0 ,1)';
-    const [results] = await db.execute(query, [Fullname, RegistrationNo, Email, ContactNo, FAX, Address, City, Description, VATNo]);
+    const query = 'INSERT INTO Supplier (Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo, Credit, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0 ,1)';
+    const [results] = await db.execute(query, [Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo]);
 
     return results.insertId;
   } catch (err) {
@@ -35,10 +35,10 @@ const getAllSuppliers = async () => {
 
 const updateSupplier = async (supplierId, supplierData) => {
   try {
-    const { Fullname, RegistrationNo, Email, ContactNo, FAX, Address, City, Description, VATNo } = supplierData;
+    const { Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo } = supplierData;
 
-    const query = 'UPDATE Supplier SET Fullname=?, RegistrationNo=?, Email=?, ContactNo=?, FAX=?, Address=?, City=?, Description=?, VATNo=? WHERE id=?';
-    await db.query(query, [Fullname, RegistrationNo, Email, ContactNo, FAX, Address, City, Description, VATNo, supplierId]);
+    const query = 'UPDATE Supplier SET Fullname=?, RegistrationNo=?, Email=?, ContactNo=?, Fax=?, Address=?, City=?, Description=?, VatNo=? WHERE id=?';
+    await db.query(query, [Fullname, RegistrationNo, Email, ContactNo, Fax, Address, City, Description, VatNo, supplierId]);
   } catch (err) {
     throw err;
   }
