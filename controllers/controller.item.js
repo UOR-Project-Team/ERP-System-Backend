@@ -19,10 +19,10 @@ const Additem = (req, res) => {
 };
 
 
-const deleteItem = (req, res) => {
+const deleteItem = async (req, res) => {
   const itemId = req.params.id;
 
-  ItemModel.deleteItem(itemId, (err, results) => {
+  await ItemModel.deleteItem(itemId, (err, results) => {
     if (err) {
       console.error('Error deleting item:', err);
       return res.status(500).json({ error: 'Error deleting item' });
@@ -56,5 +56,16 @@ const updateItem = (req, res) => {
   });
 };
 
+const getAllItems = async (req, res) => {
+  try {
+    const data =  await ItemModel.getAllItems();
+    console.log("Request has reached item controller")
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Error fetching all items:', err);
+    res.status(500).json({ error: 'Error occured while read!' });
+  }
+};
 
-module.exports = { Additem,deleteItem, updateItem };
+
+module.exports = { Additem,deleteItem, updateItem, getAllItems };

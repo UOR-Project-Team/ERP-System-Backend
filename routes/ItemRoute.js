@@ -1,15 +1,16 @@
 const express = require('express');
-const additemController = require('../controllers/itemController');
-const showItemInfo = require('../models/viewItemModel')
+const itemController = require('../controllers/controller.item');
+//const showItemInfo = require('../models/viewItemModel')
 
 const router = express.Router();
 
-router.post('/create', additemController.Additem);
+router.post('/create', itemController.Additem);
 
-router.get('/show',showItemInfo.Showitem);
+//router.get('/show',showItemInfo.Showitem);
+router.get('/',itemController.getAllItems);
 
-router.delete('/delete/:id', additemController.deleteItem);
+router.delete('/:id', itemController.deleteItem);
 
-router.put('/update/:id', additemController.updateItem);
+router.put('/:id', itemController.updateItem);
 
 module.exports = router;
