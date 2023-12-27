@@ -21,16 +21,18 @@ const Additem = (req, res) => {
 
 const deleteItem = async (req, res) => {
   const itemId = req.params.id;
-
+  console.log("delete request has reached item controller");
   await ItemModel.deleteItem(itemId, (err, results) => {
     if (err) {
       console.error('Error deleting item:', err);
       return res.status(500).json({ error: 'Error deleting item' });
     }
-
+    
     if (results.affectedRows > 0) {
       res.status(200).json({ message: 'Item deleted successfully' });
+      
     } else {
+      
       res.status(404).json({ message: 'Item not found' });
     }
   });
