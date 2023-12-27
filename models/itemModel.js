@@ -1,51 +1,94 @@
 const db2 = require('../connection');
 const db = require('../dbConfig.js');
 
-const addItem = (itemData, callback) => {
-    const { code, itemName, categoryId, unitId } = itemData;
+// const addItem = (itemData, callback) => {
+//     const { code, itemName, categoryId, unitId } = itemData;
   
-    const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
-    const values = [
-      code, itemName, categoryId, unitId
-    ]
+//     const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
+//     const values = [
+//       code, itemName, categoryId, unitId
+//     ]
   
-    db.query(query, values, (err, results) => {
-      if (err) {
-        return callback(err, null);
-      }
-      return callback(null, results);
-    });
+//     db.query(query, values, (err, results) => {
+//       if (err) {
+//         return callback(err, null);
+//       }
+//       return callback(null, results);
+//     });
+//   };
+
+  const addItem = async (itemData) => {
+    try{
+      const { code, itemName, categoryId, unitId } = itemData;
+  
+      const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
+      const values = [ code, itemName, categoryId, unitId]
+      const [results]= await db2.execute(query,values);
+
+      return results.insertId;
+    } catch (err){
+      throw err;
+    }
+
   };
+
+
   
-  const deleteItem = async (itemId, callback) => {
-    const sql = 'DELETE FROM product WHERE ID = ?';
-    console.log("delete request has reached item model");
-    await db.query(sql, [itemId], (err, results) => {
+  // const deleteItem = async (itemId, callback) => {
+  //   const sql = 'DELETE FROM product WHERE ID = ?';
+  //   console.log("delete request has reached item model");
+  //   await db.query(sql, [itemId], (err, results) => {
     
       
-      if (err) {
-        console.error('Error deleting item:', err);
-        return callback(err, null);
-      }
-      return callback(null, results);
-    });
+  //     if (err) {
+  //       console.error('Error deleting item:', err);
+  //       return callback(err, null);
+  //     }
+  //     return callback(null, results);
+  //   });
+  // };
+
+  const deleteItem = async (itemId) => {
+    try{
+      const query = 'DELETE FROM product WHERE ID = ?';
+      await db2.query(query,[itemId]);
+    }
+    catch(err)
+    {
+      throw err;
+    }
+
   };
   
 
-  const updateItem = (itemData,itemId, callback) => {
-    const { code, itemName, categoryId, unitId } = itemData;
+  // const updateItem = (itemData,itemId, callback) => {
+  //   const { code, itemName, categoryId, unitId } = itemData;
   
-    const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
-    const values = [
-      code, itemName, categoryId, unitId, itemId 
-    ]
+  //   const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+  //   const values = [
+  //     code, itemName, categoryId, unitId, itemId 
+  //   ]
   
-    db.query(query, values, (err, results) => {
-      if (err) {
-        return callback(err, null);
-      }
-      return callback(null, results);
-    });
+  //   db.query(query, values, (err, results) => {
+  //     if (err) {
+  //       return callback(err, null);
+  //     }
+  //     return callback(null, results);
+  //   });
+  // };
+
+  const updateItem = async (itemData,itemId) => {
+
+    try{
+      const { code, itemName, categoryId, unitId } = itemData;
+      const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+      const values = [ code, itemName, categoryId, unitId, itemId ]
+      await db2.query(query, values)
+
+    }
+    catch(err){
+      throw err;
+    }
   };
 
 
@@ -63,7 +106,7 @@ const getAllItems =  async () => {
                 ORDER BY
                     product.code;
                 `
-    const [results] = await db2.query(sql);
+    const [results] = await db2.execute(sql);
     
     return results;
   } catch (err) {
