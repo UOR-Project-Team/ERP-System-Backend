@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
                 return res.status(500).json({ error: 'Error Authenticating User' });
               }
               if (compareResult) {
-                const token = jwt.sign({ username: results[0].Username, fullname: results[0].Fullname, status: results[0].Status }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ username: results[0].Username, fullname: results[0].Fullname, jobrole: results[0].JobRole }, process.env.JWT_SECRET, {
                   expiresIn: '1h',
                 });
                 res.status(200).json({ message: 'User Authenticated successfully', token });
