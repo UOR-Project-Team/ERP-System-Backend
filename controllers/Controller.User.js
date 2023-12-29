@@ -1,6 +1,6 @@
 const db = require('../connection');
 const userModel = require('../models/Model.user');
-const {hashPassword} = require('./PasswordController');
+const {hashPassword} = require('./controller.password');
 
 const getUsersController = async (req, res) => {
   try {
