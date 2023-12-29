@@ -1,4 +1,4 @@
-const ItemModel = require('../models/itemModel');
+const ItemModel = require('../models/model.item');
 
 
 const Additem = async (req, res) => {

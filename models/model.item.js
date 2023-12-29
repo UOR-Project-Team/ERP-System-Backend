@@ -1,6 +1,4 @@
 const db = require('../connection');
-const db2 = require('../dbConfig.js');
-
 
   const addItem = async (itemData) => {
     try{

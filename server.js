@@ -1,23 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const categoryRoutes1 = require('./routes/categoryRoutes');
-const userroute = require('./routes/Router.User')
+
+const userroute = require('./routes/router.user')
 const categoryRoutes = require('./routes/route.category');
-const loginRoute = require('./routes/LoginRoute');
+const loginRoute = require('./routes/route.login');
 const supplierRoute = require('./routes/route.supplier')
-const itemRoutes = require('./routes/ItemRoute');
+const itemRoutes = require('./routes/route.item');
 const unitRoute = require('./routes/route.unit');
 const customerRoute = require('./routes/route.customer');
 
 require('dotenv').config();
-
 const app = express();
 app.use(cors());
+
 const port = 8081;
 
 app.use(express.json());
-
-
 app.use('/',loginRoute)
 app.use('/category', categoryRoutes)
 app.use('/user',userroute);
