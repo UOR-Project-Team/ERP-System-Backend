@@ -4,7 +4,6 @@ const createCustomer = async (req, res) => {
   try {
     const { title, fullname, email, nic, contactno, street1, street2, city, country, vatno } = req.body;
     const data = { title, fullname, email, nic, contactno, street1, street2, city, country, vatno };
-
     const customerId = await customerModel.createCustomer(data);
     res.status(201).json({ message: 'Customer created successfully', customerId });
   } catch (err) {
@@ -12,7 +11,7 @@ const createCustomer = async (req, res) => {
     if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
       const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
       const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
-      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+      res.status(409).json({ message: `Duplicate Entry!`, attributeName });
     } else {
       res.status(500).json({ message: 'Error occurred while creation!' });
     }
@@ -49,14 +48,13 @@ const updateCustomer = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
-
     await customerModel.updateCustomer(id, data);
     res.status(200).json({ message: 'Customer updated successfully' });
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
       const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
       const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
-      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+      res.status(409).json({ message: `Duplicate Entry!`, attributeName });
     } else {
       res.status(500).json({ message: 'Error occurred while updating!' });
     }
@@ -67,7 +65,6 @@ const updateCustomer = async (req, res) => {
 const deleteCustomer = async (req, res) => {
   try {
     const id = req.params.id;
-
     await customerModel.deleteCustomer(id);
     res.status(200).json({ message: 'Customer deleted successfully' });
   } catch (err) {
