@@ -50,9 +50,8 @@ const addUser = async (userData) => {
       connection.release();
   
       return result.insertId; // Return the ID of the inserted user
-    } catch (error) {
-      console.error('Error inserting user:', error); 
-      throw new Error(`Error inserting user: ${error.message}`);
+    } catch (err) {
+      throw err;
     }
   };
 

@@ -50,9 +50,15 @@ const AddUserController = async (req, res)=>{
         const newuser = await userModel.addUser(userData);
 
         res.status(200).json({message: 'User inserted successfully', userId: newuser})
-    }catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ error: error.message });
+    }catch (err) {
+      console.error('Error creating customer:', err);
+      if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+        const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+        const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+        res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+      } else {
+        res.status(500).json({ message: 'Error occurred while creation!' });
+      }
       }
 }
 
