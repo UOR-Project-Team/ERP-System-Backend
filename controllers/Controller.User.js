@@ -7,8 +7,8 @@ const getUsersController = async (req, res) => {
     const usersinfo = await userModel.getUsers();
     //console.log(usersinfo);
     res.status(200).json({ message: 'user retrieved successfully', user: usersinfo });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -21,8 +21,8 @@ const getUserByIDController = async(req, res)=>{
 
     res.status(200).json({ message: 'user retrieved successfully', user: getUser });
 
-    }catch(error){
-        res.status(500).json({ error: error.message });
+    }catch(err){
+        res.status(500).json({ error: err.message });
     }
 }
 
@@ -78,8 +78,8 @@ const deleteuserByIDcontroller = async(req, res) =>{
             res.status(404).json({ error: 'User not found or already deleted' });
           } 
 
-    }catch(error){
-        res.status(500).json({error: error.message});
+    }catch(err){
+        res.status(500).json({error: err.message});
         
     }
 }
@@ -119,10 +119,16 @@ const updateUserController = async (req, res) => {
     } else {
       res.status(404).json({ error: 'Error Updating User' });
     }
-  } catch (error) {
-    console.error('Error updating user:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
+  } catch (err) {
+    console.error('Error creating customer:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
+    }
 };
 
 const searchUser = async(req, res)=>{
@@ -134,9 +140,8 @@ const searchUser = async(req, res)=>{
 
   res.status(200).json({ message: 'user retrieved successfully', user: users });
 
-  }catch(error){
-    console.error('Error Searching user:', error); 
-    return res.status(500).json({ error: 'Internal Server Error' });
+  }catch(err){
+    res.status(500).json({ error: err.message });
 }
 }
 
