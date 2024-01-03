@@ -1,4 +1,4 @@
-const LoginModel = require('../models/LoginModel');
+const LoginModel = require('../models/model.login');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {hashPassword} = require('./PasswordController');
