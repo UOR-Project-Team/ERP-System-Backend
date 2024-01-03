@@ -1,19 +1,52 @@
 const db = require('../connection');
 
-  const addItem = async (itemData) => {
-    try{
-      const { code, itemName, categoryId, unitId } = itemData;
+  // const addItem = async (itemData) => {
+  //   try{
+  //     const { code, itemName, categoryId, unitId, supplierId} = itemData;
   
-      const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
-      const values = [ code, itemName, categoryId, unitId]
-      const [results]= await db.execute(query,values);
+  //     const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
+  //     const values1 = [ code, itemName, categoryId, unitId]
+  //     const values2 = supplierId
+  //     const [results]= await db.execute(query,values1);
 
-      return results.insertId;
-    } catch (err){
-      throw err;
+  //     return results.insertId;
+  //   } catch (err){
+  //     throw err;
+  //   }
+
+  // };
+
+
+
+  const addItem = async (itemData) => {
+    const { code, itemName, categoryId, unitId, supplierId} = itemData;
+    const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
+    const values1 = [ code, itemName, categoryId, unitId]
+    const values2 = supplierId
+  
+    try {
+      // Start a transaction
+      await db.beginTransaction();
+  
+      // Insert into the product table
+      const productResult = await db.query(query,values1);
+  
+      const productId = productResult.insertId;
+  
+      // Insert into the supplier_product table
+      await db.query('INSERT INTO supplier_product (productId, supplierId) VALUES (?, ?)', [productId, values2]);
+  
+      // Commit the transaction
+      await db.commit();
+  
+      return { success: true, productId };
+    } catch (error) {
+      // Rollback the transaction if an error occurs
+      await db.rollback();
+      return { success: false, error: error.message };
     }
-
   };
+
 
 
   const deleteItem = async (itemId) => {
