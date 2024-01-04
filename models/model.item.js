@@ -34,8 +34,8 @@ const db = require('../connection');
       const productResult = await connection.query(query, values);
   
        const productId = await productResult[0].insertId;
-       console.log(productId)
-       console.log(productResult)
+       //console.log(productId)
+       //console.log(productResult)
       
   
       // Insert into the supplier_product table
@@ -59,10 +59,39 @@ const db = require('../connection');
 
 
 
+  // const deleteItem = async (itemId) => {
+  //   try{
+  //     const query = 'DELETE FROM product WHERE ID = ?';
+  //     await db.query(query,[itemId]);
+  //   }
+  //   catch(err)
+  //   {
+  //     throw err;
+  //   }
+
+  // };
+
+
+
   const deleteItem = async (itemId) => {
+
+    const connection = await db.getConnection();
+    const query1 = 'DELETE FROM product WHERE ID = ?';
+    const query2 = 'DELETE FROM supplier_product WHERE Product_ID = ?';
+
     try{
-      const query = 'DELETE FROM product WHERE ID = ?';
-      await db.query(query,[itemId]);
+
+      // Start a transaction on the acquired connection
+      await connection.beginTransaction();
+
+       // Delete record from the supplier_product table first(Because it's the child table)
+      await connection.query(query2, [itemId] );
+
+      // Delete record from the product table next(Since it's the parent table)
+      await connection.query(query1, [itemId] );
+
+      await connection.commit();
+  
     }
     catch(err)
     {
@@ -70,6 +99,8 @@ const db = require('../connection');
     }
 
   };
+
+
   
 
   const updateItem = async (itemData,itemId) => {
