@@ -16,34 +16,44 @@ const db = require('../connection');
 
   // };
 
-
-
+  //Add item function when product table and supplier_product table is maintained separatly instead of adding supplier id in the product table
   const addItem = async (itemData) => {
-    const { code, itemName, categoryId, unitId, supplierId} = itemData;
-    const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
-    const values1 = [ code, itemName, categoryId, unitId]
-    const values2 = supplierId
+    const { code, itemName, categoryId, unitId, supplierId } = itemData;
+    const query = 'INSERT INTO product (Code, Name, Category_ID, Unit_ID) VALUES (?,?,?,?)';
+    const values = [code, itemName, categoryId, unitId];
+    
+    // Get a connection from the pool
+    const connection = await db.getConnection();
   
     try {
-      // Start a transaction
-      await db.beginTransaction();
+  
+      // Start a transaction on the acquired connection
+      await connection.beginTransaction();
   
       // Insert into the product table
-      const productResult = await db.query(query,values1);
+      const productResult = await connection.query(query, values);
   
-      const productId = productResult.insertId;
+       const productId = await productResult[0].insertId;
+       console.log(productId)
+       console.log(productResult)
+      
   
       // Insert into the supplier_product table
-      await db.query('INSERT INTO supplier_product (productId, supplierId) VALUES (?, ?)', [productId, values2]);
+      await connection.query('INSERT INTO supplier_product (Supplier_ID, Product_ID) VALUES (?, ?)', [supplierId, productId]);
   
       // Commit the transaction
-      await db.commit();
+      await connection.commit();
   
       return { success: true, productId };
     } catch (error) {
       // Rollback the transaction if an error occurs
-      await db.rollback();
+      await connection.rollback();
       return { success: false, error: error.message };
+    } finally {
+      // Release the connection back to the pool
+      if (connection) {
+        connection.release();
+      }
     }
   };
 
