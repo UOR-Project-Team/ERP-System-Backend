@@ -112,17 +112,58 @@ const db = require('../connection');
 
   
 
+  // const updateItem = async (itemData,itemId) => {
+
+  //   try{
+  //     const { code, itemName, categoryId, unitId } = itemData;
+  //     const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+  //     const values = [ code, itemName, categoryId, unitId, itemId ]
+  //     await db.query(query, values)
+
+  //   }
+  //   catch(err){
+  //     throw err;
+  //   }
+  // };
+
+
   const updateItem = async (itemData,itemId) => {
 
-    try{
-      const { code, itemName, categoryId, unitId } = itemData;
-      const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
-      const values = [ code, itemName, categoryId, unitId, itemId ]
-      await db.query(query, values)
+    const connection = await db.getConnection();
+    const query1 = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+    const query2 = 'UPDATE supplier_product SET Supplier_ID=? WHERE Product_ID = ?';
 
+    const { code, itemName, categoryId, unitId, supplierId } = itemData;
+    const values1 = [ code, itemName, categoryId, unitId, itemId ]
+    const values2 = [supplierId,itemId]
+    console.log("update request reached model item");
+    try{
+
+      // Start a transaction on the acquired connection
+      await connection.beginTransaction();
+      
+      //Update product table
+      await connection.query(query1, values1)
+
+      //Update supplier_product table
+      await connection.query(query2, values2)
+
+
+      // Commit the transaction
+      await connection.commit();
+
+      return { success: true, itemId };
     }
     catch(err){
+      // Rollback the transaction if an error occurs
+      await connection.rollback();
       throw err;
+    }
+    finally{
+      // Release the connection back to the pool
+      if (connection) {
+        connection.release();
+      }
     }
   };
 
@@ -134,7 +175,8 @@ const getAllItems =  async () => {
                     product.*,
                     product_category.Description AS CategoryName,
                     product_unit.Description AS UnitName,
-                    supplier.Fullname AS SupplierName
+                    supplier.Fullname AS SupplierName,
+                    supplier.ID AS Supplier_ID
                 FROM
                     product
                     JOIN product_category ON product.Category_ID = product_category.ID
