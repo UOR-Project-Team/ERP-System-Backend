@@ -16,7 +16,7 @@ db.getConnection()
     connection.release();
   })
   .catch(error => {
-    console.error('Error connecting to the database:', error.message);
+    console.error('Error ocured while connecting to the database');
   });
 
 module.exports = db;
