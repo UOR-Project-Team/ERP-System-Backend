@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const userroute = require('./routes/router.user')
+const userroute = require('./routes/Router.User')
 const categoryRoutes = require('./routes/route.category');
 const loginRoute = require('./routes/route.login');
 const supplierRoute = require('./routes/route.supplier')
@@ -10,6 +10,7 @@ const unitRoute = require('./routes/route.unit');
 const customerRoute = require('./routes/route.customer');
 const grnRoute = require('./routes/route.grn');
 const dashboardRoute = require('./routes/route.dashboard');
+const invoiceRoute = require('./routes/route.invoice')
 
 require('dotenv').config();
 const app = express();
@@ -27,6 +28,7 @@ app.use('/item', itemRoutes);
 app.use('/unit', unitRoute);
 app.use('/grn', grnRoute);
 app.use('/dashboard', dashboardRoute);
+app.use('/invoice', invoiceRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

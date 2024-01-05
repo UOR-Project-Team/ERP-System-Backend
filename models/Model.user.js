@@ -12,8 +12,8 @@ const getUsers = async () => {
     connection.release();
 
     return result;
-  } catch (error) {
-    throw new Error(`Error fetching users: ${error.message}`);
+  }catch(err){
+    throw err;
   }
 };
 
@@ -27,9 +27,9 @@ const GetuserID =async(id)=>{
     connection.release();
 
     return result;
-    }catch(error){
-        throw new Error(`Error fetching users: ${error.message}`);
-    }
+  }catch(err){
+    throw err;
+  }
 }
 
 const addUser = async (userData) => {
@@ -50,9 +50,8 @@ const addUser = async (userData) => {
       connection.release();
   
       return result.insertId; // Return the ID of the inserted user
-    } catch (error) {
-      console.error('Error inserting user:', error); 
-      throw new Error(`Error inserting user: ${error.message}`);
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -66,8 +65,8 @@ const addUser = async (userData) => {
     connection.release();
 
     return result.affectedRows;
-    }catch(error){
-        throw new Error(`Error deleting user: ${error.message}`);
+    }catch(err){
+      throw err;
     }
   }
 
@@ -91,8 +90,8 @@ const addUser = async (userData) => {
       connection.release();
   
       return result.affectedRows;
-    } catch (error) {
-      throw new Error(`Error updating user: ${error.message}`);
+    }catch(err){
+      throw err;
     }
   };
 
@@ -107,10 +106,9 @@ const addUser = async (userData) => {
 
     return result;
     
-    }catch(error){
-        console.error('Error updating user:', error); 
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
+  }catch(err){
+    throw err;
+  }
   }
 
 module.exports = { getUsers,GetuserID,addUser,DeleteuserByID,updateUser,searchuser };
