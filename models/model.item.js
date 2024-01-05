@@ -95,7 +95,16 @@ const db = require('../connection');
     }
     catch(err)
     {
+      //Rollback the transaction if an error occurs
+      await connection.rollback();
       throw err;
+    }
+    finally{
+      //Release the connection back to the pool
+      if(connection){
+        connection.release();
+      }
+
     }
 
   };
@@ -124,11 +133,14 @@ const getAllItems =  async () => {
           const sql= `SELECT
                     product.*,
                     product_category.Description AS CategoryName,
-                    product_unit.Description AS UnitName
+                    product_unit.Description AS UnitName,
+                    supplier.Fullname AS SupplierName
                 FROM
                     product
                     JOIN product_category ON product.Category_ID = product_category.ID
                     JOIN product_unit ON product.Unit_ID = product_unit.ID
+                    JOIN supplier_product ON product.ID = supplier_product.Product_ID
+                    JOIN supplier ON supplier_product. Supplier_ID =  supplier.ID
                 ORDER BY
                     product.code;
                 `
