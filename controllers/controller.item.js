@@ -4,8 +4,8 @@ const ItemModel = require('../models/model.item');
 const Additem = async (req, res) => {
 
   try{
-    const { code, itemName, categoryId, unitId } = req.body;
-    const itemData = { code, itemName, categoryId, unitId };
+    const { code, itemName, categoryId, unitId, supplierId } = req.body;
+    const itemData = { code, itemName, categoryId, unitId, supplierId };
     const itemId = await ItemModel.addItem(itemData)
     res.status(201).json({message: 'Item Added Successfully',itemId,itemData});
   }
@@ -39,8 +39,9 @@ const deleteItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try{
     const itemId = req.params.id
-    const { code, itemName, categoryId, unitId } = req.body;
-    const itemData = { code, itemName, categoryId, unitId };
+    const { code, itemName, categoryId, unitId, supplierId } = req.body;
+    const itemData = { code, itemName, categoryId, unitId, supplierId };
+    console.log("update request reached controller.item");
 
     await ItemModel.updateItem(itemData, itemId);
     res.status(200).json({message: 'Item has been updated successfully'});
