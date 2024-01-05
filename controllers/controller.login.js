@@ -1,6 +1,7 @@
 const LoginModel = require('../models/model.login');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const {hashPassword} = require('./controller.password');
 
 const loginUser = async (req, res) => {
 
@@ -20,10 +21,22 @@ const loginUser = async (req, res) => {
                 return res.status(500).json({ error: 'Error Authenticating User' });
               }
               if (compareResult) {
-                const token = jwt.sign({ username: results[0].Username, fullname: results[0].Fullname, jobrole: results[0].JobRole }, process.env.JWT_SECRET, {
+                const token = jwt.sign({
+                  username: results[0].Username,
+                  fullname: results[0].Fullname,
+                  jobrole: results[0].JobRole,
+                  loginflag: results[0].Loginflag, 
+                }, process.env.JWT_SECRET, {
                   expiresIn: '1h',
                 });
+                LoginModel.updateloginflag(username, (updateErr, loginflag) => {
+                  if (updateErr) {
+                    console.error('Error updating login flag:', updateErr);
+                    return res.status(500).json({ error: 'Error Authenticating User' });
+                  }});
                 res.status(200).json({ message: 'User Authenticated successfully', token });
+                
+
               } else {
                 res.status(401).json({ error: 'Invalid Password' });
               }
@@ -34,10 +47,34 @@ const loginUser = async (req, res) => {
 
           }
         });
+
       } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal Server Error' });
       }
 };
 
-module.exports = {loginUser}
+
+const resetPasswordController = async(req, res)=>{
+    try{
+      const username = req.params.name
+
+
+      const password = req.body.password.toString();
+      const newhashpassword =await hashPassword(password);
+
+      const resetuserpassword = await LoginModel.resetpassword(username,newhashpassword);
+
+      if(resetuserpassword >0){
+      res.status(200).json({message: 'User Password Change successfully', userId: resetuserpassword})
+      }else{
+        res.status(404).json({message: 'Invalid UserName'})
+      }
+
+    }catch (error) {
+        console.error('Error during Reset password:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+}
+
+module.exports = {loginUser,resetPasswordController}

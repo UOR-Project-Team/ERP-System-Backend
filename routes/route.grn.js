@@ -1,10 +1,13 @@
 const express = require('express');
-const { getSuppliers, getItemsById } = require('../controllers/controller.grn');
+const grncontroller = require('../controllers/controller.grn');
 
 
 const router = express.Router();
 
-router.get('/suppliers', getSuppliers);
-router.get('/items/:id', getItemsById);
+router.get('/suppliers', grncontroller.getSuppliers);
+router.get('/items/:id', grncontroller.getItemsById);
+router.get('/grnlist', grncontroller.grnlist);
+
+//router.get('/search', grncontroller.searchSuppliers);
 
 module.exports = router;
