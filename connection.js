@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise');
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'mysqluserpwd',
   database: 'erp_systemdb',
   waitForConnections: true,
   connectionLimit: 10,

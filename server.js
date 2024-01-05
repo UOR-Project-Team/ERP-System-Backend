@@ -9,6 +9,8 @@ const itemRoutes = require('./routes/route.item');
 const unitRoute = require('./routes/route.unit');
 const customerRoute = require('./routes/route.customer');
 const grnRoute = require('./routes/route.grn');
+const invoiceRoute = require('./routes/route.invoice')
+
 
 require('dotenv').config();
 const app = express();
@@ -25,6 +27,7 @@ app.use('/customer', customerRoute);
 app.use('/item', itemRoutes);
 app.use('/unit', unitRoute);
 app.use('/grn', grnRoute);
+app.use('/invoice', invoiceRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
