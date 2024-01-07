@@ -194,4 +194,61 @@ const getAllItems =  async () => {
   }
 };
 
-  module.exports = { addItem, deleteItem ,updateItem,getAllItems};
+const getAllItemsByUnitID =  async (unitId) => {
+  try {
+    const sql = `
+      SELECT
+        product.*,
+        product_category.Description AS CategoryName,
+        product_unit.Description AS UnitName,
+        supplier.Fullname AS SupplierName,
+        supplier.ID AS Supplier_ID
+      FROM
+        product
+        JOIN product_category ON product.Category_ID = product_category.ID
+        JOIN product_unit ON product.Unit_ID = product_unit.ID
+        JOIN supplier_product ON product.ID = supplier_product.Product_ID
+        JOIN supplier ON supplier_product.Supplier_ID = supplier.ID
+      WHERE
+        product.Unit_ID = ?
+      ORDER BY
+        product.code;
+    `;
+    
+    const [results] = await db.execute(sql, [unitId]);
+    
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
+const getAllItemsByCategoryID =  async (categoryId) => {
+  try {
+          const sql= `SELECT
+                    product.*,
+                    product_category.Description AS CategoryName,
+                    product_unit.Description AS UnitName,
+                    supplier.Fullname AS SupplierName,
+                    supplier.ID AS Supplier_ID
+                FROM
+                    product
+                    JOIN product_category ON product.Category_ID = product_category.ID
+                    JOIN product_unit ON product.Unit_ID = product_unit.ID
+                    JOIN supplier_product ON product.ID = supplier_product.Product_ID
+                    JOIN supplier ON supplier_product. Supplier_ID =  supplier.ID
+                WHERE
+                    product.Category_ID = ?
+                ORDER BY
+                    product.code;
+                `
+                const [results] = await db.execute(sql, [categoryId]);
+    
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports = { addItem, deleteItem, updateItem, getAllItems, getAllItemsByUnitID, getAllItemsByCategoryID };

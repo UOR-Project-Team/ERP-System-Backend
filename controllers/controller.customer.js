@@ -62,6 +62,28 @@ const updateCustomer = async (req, res) => {
   }
 };
 
+const activateCustomer = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await customerModel.activateCustomer(id);
+    res.status(200).json({ message: 'Customer activated successfully' });
+  } catch (err) {
+    console.error('Error activate Customer:', err);
+    res.status(500).json({ message: 'Error occurred while Activating!' });
+  }
+};
+
+const deactivateCustomer = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await customerModel.deactivateCustomer(id);
+    res.status(200).json({ message: 'Customer deactivated successfully' });
+  } catch (err) {
+    console.error('Error deactivate Customer:', err);
+    res.status(500).json({ message: 'Error occurred while Deactivating!' });
+  }
+};
+
 const deleteCustomer = async (req, res) => {
   try {
     const id = req.params.id;
@@ -73,4 +95,4 @@ const deleteCustomer = async (req, res) => {
   }
 };
 
-module.exports = { createCustomer, readCustomer, readAllCustomers, updateCustomer, deleteCustomer };
+module.exports = { createCustomer, readCustomer, readAllCustomers, updateCustomer, activateCustomer, deactivateCustomer, deleteCustomer };

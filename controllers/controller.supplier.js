@@ -70,6 +70,28 @@ const updateSupplier = async (req, res) => {
   }
 };
 
+const activateSupplier = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await supplierModel.activateSupplier(id);
+    res.status(200).json({ message: 'Supplier activated successfully' });
+  } catch (err) {
+    console.error('Error activate Supplier:', err);
+    res.status(500).json({ message: 'Error occurred while Activating!' });
+  }
+};
+
+const deactivateSupplier = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await supplierModel.deactivateSupplier(id);
+    res.status(200).json({ message: 'Supplier deactivated successfully' });
+  } catch (err) {
+    console.error('Error deactivate Supplier:', err);
+    res.status(500).json({ message: 'Error occurred while Deactivating!' });
+  }
+};
+
 const deleteSupplier = async (req, res) => {
   try {
     const supplierId = req.params.id;
@@ -82,4 +104,4 @@ const deleteSupplier = async (req, res) => {
   }
 };
 
-module.exports = { createSupplier, getSupplierById, readAllSuppliers, updateSupplier, deleteSupplier };
+module.exports = { createSupplier, getSupplierById, readAllSuppliers, updateSupplier, activateSupplier, deactivateSupplier, deleteSupplier };
