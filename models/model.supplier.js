@@ -44,6 +44,24 @@ const updateSupplier = async (supplierId, supplierData) => {
   }
 };
 
+const activateSupplier = async (supplierId) => {
+  try {
+    const query = 'UPDATE Supplier SET Status=1 WHERE id=?';
+    await db.query(query, [supplierId]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const deactivateSupplier = async (supplierId) => {
+  try {
+    const query = 'UPDATE Supplier SET Status=0 WHERE id=?';
+    await db.query(query, [supplierId]);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const deleteSupplier = async (supplierId) => {
   try {
     const query = 'DELETE FROM Supplier WHERE ID = ?';
@@ -54,4 +72,4 @@ const deleteSupplier = async (supplierId) => {
   }
 };
 
-module.exports = { createSupplier, getSupplierById, getAllSuppliers, updateSupplier, deleteSupplier };
+module.exports = { createSupplier, getSupplierById, getAllSuppliers, updateSupplier, activateSupplier, deactivateSupplier, deleteSupplier };

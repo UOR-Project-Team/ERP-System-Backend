@@ -4,7 +4,7 @@ const createCustomer = async (data) => {
   try {
     const { title, fullname, email, nic, contactno, street1, street2, city, country, vatno } = data;
 
-    const query = 'INSERT INTO customer (title, fullname, email, nic, contactno, street1, street2, city, country, vatno) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO customer (title, fullname, email, nic, contactno, street1, street2, city, country, vatno, debit, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0.00, 1)';
     const [results] = await db.execute(query, [title, fullname, email, nic, contactno, street1, street2, city, country, vatno]);
 
     return results.insertId;
@@ -44,6 +44,24 @@ const updateCustomer = async (id, data) => {
   }
 };
 
+const activateCustomer = async (cusomerId) => {
+  try {
+    const query = 'UPDATE customer SET Status=1 WHERE id=?';
+    await db.query(query, [cusomerId]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const deactivateCustomer = async (cusomerId) => {
+  try {
+    const query = 'UPDATE customer SET Status=0 WHERE id=?';
+    await db.query(query, [cusomerId]);
+  } catch (err) {
+    throw err;
+  }
+};
+
 const deleteCustomer = async (id) => {
   try {
     const query = 'DELETE FROM customer WHERE id = ?';
@@ -53,4 +71,4 @@ const deleteCustomer = async (id) => {
   }
 };
 
-module.exports = { createCustomer, getCustomerById, getAllCustomers, updateCustomer, deleteCustomer };
+module.exports = { createCustomer, getCustomerById, getAllCustomers, updateCustomer, activateCustomer, deactivateCustomer, deleteCustomer };
