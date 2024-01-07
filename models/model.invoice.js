@@ -31,4 +31,29 @@ const getItemPriceById = async (ProductId) =>{
     }
 }
 
-module.exports = { getAllCustomers,  getAllItems , getItemPriceById };
+
+
+const getAllInvoices = async () =>{
+  try{
+      const query= `SELECT
+                  invoice.*,
+                  user.Fullname AS UserName,
+                  customer.Fullname AS CustomerName
+
+                  FROM
+                      invoice
+                      JOIN user ON invoice.User_ID = user.ID
+                      JOIN customer ON invoice.Customer_ID = customer.ID
+                  ORDER BY
+                    invoice.ID;
+                  `
+      const [results] = await db.execute(query);
+      return results;
+  } catch (err){
+      throw err;
+  }
+}
+
+
+
+module.exports = { getAllCustomers,  getAllItems , getItemPriceById, getAllInvoices };
