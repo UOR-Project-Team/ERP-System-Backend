@@ -1,28 +1,34 @@
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const adduserRoutes = require('./routes/AdduserRoute');
-const loginRoute = require('./routes/LoginRoute');
-const supplierRoute = require('./routes/SupplierRoute')
-const itemRoutes = require('./routes/ItemRoute');
-const unitRoute = require('./routes/UnitRoute');
 
+const userroute = require('./routes/Router.User')
+const categoryRoutes = require('./routes/route.category');
+const loginRoute = require('./routes/route.login');
+const supplierRoute = require('./routes/route.supplier')
+const itemRoutes = require('./routes/route.item');
+const unitRoute = require('./routes/route.unit');
+const customerRoute = require('./routes/route.customer');
+const grnRoute = require('./routes/route.grn');
+const dashboardRoute = require('./routes/route.dashboard');
+const invoiceRoute = require('./routes/route.invoice')
 
+require('dotenv').config();
 const app = express();
 app.use(cors());
+
 const port = 8081;
 
 app.use(express.json());
-
-
 app.use('/',loginRoute)
-app.use('/users', userRoutes);
 app.use('/category', categoryRoutes)
-app.use('/user', adduserRoutes);
-app.use('/supplier',supplierRoute)
+app.use('/user',userroute);
+app.use('/supplier',supplierRoute);
+app.use('/customer', customerRoute);
 app.use('/item', itemRoutes);
 app.use('/unit', unitRoute);
+app.use('/grn', grnRoute);
+app.use('/dashboard', dashboardRoute);
+app.use('/invoice', invoiceRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
