@@ -25,6 +25,7 @@ const getItemPriceById = async (ProductId) =>{
         const query = 'SELECT id,Barcode,  Unit_Price FROM Purchase_Product where Product_ID = ?';
         const [results] = await db.execute(query, [ProductId]);
         
+        
         return results;
     } catch (err){
         throw err;
