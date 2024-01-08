@@ -1,12 +1,14 @@
 const express = require('express');
-const { getCustomers, getAllItems , getItemPriceById , getAllInvoices } = require('../controllers/controller.invoice');
+const invoiceController = require('../controllers/controller.invoice');
 
 
 const router = express.Router();
 
-router.get('/customers', getCustomers);
-router.get('/items', getAllItems);
-router.get('/product/:id', getItemPriceById);
-router.get('/invoices', getAllInvoices);
+router.get('/customers', invoiceController.getCustomers);
+router.get('/items', invoiceController.getAllItems);
+router.get('/product/:id', invoiceController.getItemPriceById);
+router.get('/invoices', invoiceController.getAllInvoices);
+
+router.post('/list', invoiceController.addinvoicelist);
 
 module.exports = router;

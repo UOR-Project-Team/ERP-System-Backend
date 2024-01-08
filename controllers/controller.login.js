@@ -21,7 +21,9 @@ const loginUser = async (req, res) => {
                 return res.status(500).json({ error: 'Error Authenticating User' });
               }
               if (compareResult) {
+                console.log(compareResult)
                 const token = jwt.sign({
+                  userid : results[0].ID,
                   username: results[0].Username,
                   fullname: results[0].Fullname,
                   jobrole: results[0].JobRole,

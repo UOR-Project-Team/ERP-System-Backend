@@ -19,13 +19,13 @@ const getSuppliers = async (req, res) => {
 const getItemsById = async (req, res) => {
     try {
       const supplierId = req.params.id;
-      const data = await grnModel.getAllItems();
-  
-      if (!data) {
+      const result = await grnModel.getAllItems();
+     // console.log('Items In data', data)
+      if (result.length === 0) {
         return res.status(404).json({ error: 'Items not found!' });
       }
 
-      res.status(200).json(data);
+      res.status(200).json(result);
 
     } catch (err) {
       console.error('Error fetching items:', err);
@@ -36,26 +36,32 @@ const getItemsById = async (req, res) => {
   const grnlist = async(req,res)=>{
     try{
 
-      const { grnNo, supplierid,userid, items, totalAmount } = req.body;
-      //const grninfo = { grnNo, suppliername, items,product, totalAmount }
-      // const totaldata = items.length;
-      // const totalresult = 0;
+      const { grnNo, supplierid,userid, puchaseditems, totalAmount } = req.body;
 
-      // if (!Array.isArray(grninfo)) {
-      //   return res.status(400).send('Invalid grn data format');
-      // }
+      console.log('received')
+      if (!grnNo || !supplierid || !userid || !Array.isArray(puchaseditems) || isNaN(totalAmount)) {
+        console.log('test 1')
+        return res.status(400).json({ error: 'Invalid or missing parameters' });
+      }
+  
+      for (const item of puchaseditems) {
+        if (!item.productId || isNaN(item.quantity) || isNaN(item.purchase_price)) {
+          console.log('test 2')
+          return res.status(400).json({ error: 'Invalid item data format' });
+        }
+      }
 
-      const grn = await grnModel.addgrn(grnNo,supplierid,userid,items,totalAmount)
+      const grn = await grnModel.addgrn(grnNo,supplierid,userid,puchaseditems,totalAmount)
 
 
       if(grn){
-        res.status(200).json({message: 'Succesfully Inserted', grnid: grn})
+        res.status(201).json({message: 'Succesfully Inserted', grnid: grn})
       }else{
-        res.status(500).json({message: 'Failed to Inserted', grnid : grn})
+        res.status(400).json({message: 'Failed to Inserted', grnid : grn})
       }
-    }catch(error){
-      console.error('Error updating grn:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+    }catch(err){
+      console.error('Error updating grn:', err);
+      return res.status(500).json({ err: 'Internal Server Error' });
     }
   }
 
