@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/suppliers', grncontroller.getSuppliers);
 router.get('/items/:id', grncontroller.getItemsById);
-router.get('/grnlist', grncontroller.grnlist);
+router.post('/list', grncontroller.grnlist);
 
 //router.get('/search', grncontroller.searchSuppliers);
 

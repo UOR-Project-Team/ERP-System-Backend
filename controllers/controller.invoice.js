@@ -47,6 +47,37 @@ const getAllItems = async (req, res) => {
     }
   };
 
+  const addinvoicelist = async(req, res)=>{
+    try{
+
+      const { invoiceNumber, Customerid, userid, solditems, totalAmount } = req.body;
+
+      if (!invoiceNumber || !userid || !Array.isArray(solditems) || isNaN(totalAmount)) {
+        return res.status(400).json({ error: 'Invalid or missing parameters' });
+      }
+  
+      for (const solditem of solditems) {
+        if (!solditem.productId || isNaN(solditem.quantity) || isNaN(solditem.s_price) || isNaN(solditem.barcode)) {
+          return res.status(400).json({ error: 'Invalid item data format' });
+        }
+      }
+
+      const invoice = await invoiceModel.addinvoice(invoiceNumber, Customerid,userid, solditems, totalAmount)
+
+      if(invoice){
+        res.status(201).json({message: 'Succesfully Inserted'})
+      }else{
+        res.status(400).json({message: 'Failed to Inserted'})
+      }
+      
+
+
+    }catch (err) {
+      console.error('Error updating Invoice items:', err);
+      return res.status(500).json({ error: 'Error occured while read!', err });
+    }
+  }
+
 
   const getAllInvoices = async (req, res) => {
     try {
@@ -64,4 +95,4 @@ const getAllItems = async (req, res) => {
     }
   };
 
-module.exports = { getCustomers,  getItemPriceById , getAllItems, getAllInvoices };
+module.exports = { getCustomers,  getItemPriceById , getAllItems,addinvoicelist, getAllInvoices };

@@ -17,7 +17,8 @@ try {
     // Supplier_Id as input
     //const query = 'SELECT Product.ID, Product.Code, Product.Name FROM Product RIGHT JOIN Supplier_Product ON Product.ID = Supplier_Product.Product_ID WHERE Supplier_Product.Supplier_ID = ?';
     const query = 'SELECT ID, Code, Name FROM product';
-    const [results] = await db.execute(query, );
+    const [results] = await db.execute(query);
+    //console.log(results)
     return results;
 } catch (err) {
     throw err;
@@ -29,16 +30,14 @@ const addgrn = async(grnNo,supplierid,userid,items,totalAmount)=>{
   let connection;
   try {
     
-    const connection = await db.getConnection();
+     connection = await db.getConnection();
     await connection.beginTransaction();
 
-    const Invoicequery = 'INSERT INTO grn (Date_Time, Supplier_ID,User_ID, total_amount,No) VALUES ( NOW(), ?,?,?,?)';
-    const [results] = await connection.execute(Invoicequery,[supplierid,userid,totalAmount,grnNo]);
+    const Invoicequery = 'INSERT INTO grn (No,Date_Time, Supplier_ID,User_ID, total_amount) VALUES (?, NOW(), ?,?,?)';
+    const [results] = await connection.execute(Invoicequery,[grnNo,supplierid,userid,totalAmount]);
     
     const generatedGRNNo = results.insertId;
     if (results.insertId < 0) {
-      //connection.rollback();
-      connection.release();
       throw new Error('Error inserting GRN data');
     }
     
@@ -54,8 +53,7 @@ const addgrn = async(grnNo,supplierid,userid,items,totalAmount)=>{
       const purchase_itemID = itemResult.insertId;
 
       // Insert into `purchase_product` table
-      const productQuery =
-        'INSERT INTO purchase_product (Purchase_Item_ID, Product_ID, Barcode, Unit_price) VALUES (?, ?, ?, ?)';
+      const productQuery ='INSERT INTO purchase_product (Purchase_Item_ID, Product_ID, Barcode, Unit_price) VALUES (?, ?, ?, ?)';
       const purchaseproductQuery = await connection.execute(productQuery, [purchase_itemID,productId, barcode, unitprice]);
 
       if (purchaseproductQuery.insertId < 0) {
