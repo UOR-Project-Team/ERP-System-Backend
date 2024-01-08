@@ -47,4 +47,21 @@ const getAllItems = async (req, res) => {
     }
   };
 
-module.exports = { getCustomers,  getItemPriceById , getAllItems };
+
+  const getAllInvoices = async (req, res) => {
+    try {
+        const invoices = await invoiceModel.getAllInvoices();
+   
+        if (invoices.length > 0) {
+            res.status(200).json(invoices);
+          } else {
+            res.status(404).json({ message: 'No invoice found' });
+          }
+
+    } catch (err) {
+      console.error('Error fetching invoices:', err);
+      res.status(500).json({ error: 'Error occured while read!' });
+    }
+  };
+
+module.exports = { getCustomers,  getItemPriceById , getAllItems, getAllInvoices };
