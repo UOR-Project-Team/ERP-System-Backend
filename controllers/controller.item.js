@@ -83,5 +83,15 @@ const getAllItemsByCategory = async (req, res) => {
   }
 };
 
+const getAllItemsBySupplier = async (req, res) => {
+  try {
+    const supplierId = req.params.id;
+    const data =  await ItemModel.getAllItemsBySupplierID(supplierId);
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Error fetching all items:', err);
+    res.status(500).json({ error: 'Error occured while read!' });
+  }
+};
 
-module.exports = { Additem,deleteItem, updateItem, getAllItems, getAllItemsByUnit, getAllItemsByCategory };
+module.exports = { Additem,deleteItem, updateItem, getAllItems, getAllItemsByUnit, getAllItemsByCategory, getAllItemsBySupplier };

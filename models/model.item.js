@@ -251,4 +251,31 @@ const getAllItemsByCategoryID =  async (categoryId) => {
   }
 };
 
-module.exports = { addItem, deleteItem, updateItem, getAllItems, getAllItemsByUnitID, getAllItemsByCategoryID };
+const getAllItemsBySupplierID =  async (supplierId) => {
+  try {
+          const sql= `SELECT
+                    product.*,
+                    product_category.Description AS CategoryName,
+                    product_unit.Description AS UnitName,
+                    supplier.Fullname AS SupplierName,
+                    supplier.ID AS Supplier_ID
+                FROM
+                    product
+                    JOIN product_category ON product.Category_ID = product_category.ID
+                    JOIN product_unit ON product.Unit_ID = product_unit.ID
+                    JOIN supplier_product ON product.ID = supplier_product.Product_ID
+                    JOIN supplier ON supplier_product.Supplier_ID =  supplier.ID
+                WHERE
+                    supplier_product. Supplier_ID = ?
+                ORDER BY
+                    product.code;
+                `
+                const [results] = await db.execute(sql, [supplierId]);
+    
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports = { addItem, deleteItem, updateItem, getAllItems, getAllItemsByUnitID, getAllItemsByCategoryID, getAllItemsBySupplierID };
