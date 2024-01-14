@@ -6,10 +6,16 @@ const createUnit = async (req, res) => {
     const unitData = { Description ,SI };
 
     const unitId = await unitModel.createUnit(unitData);
-    res.status(201).json({ message: 'Unit created successfully', unitId, Description, SI });
+    res.status(201).json({ message: 'Unit created successfully', unitId });
   } catch (err) {
-    console.error('Error creating unit:', err);
-    res.status(500).json({ error: 'Error creating unit' });
+    console.error('Error creating Unit:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(409).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
   }
 };
 

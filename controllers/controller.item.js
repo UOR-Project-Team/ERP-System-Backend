@@ -7,13 +7,17 @@ const Additem = async (req, res) => {
     const { code, itemName, categoryId, unitId, supplierId } = req.body;
     const itemData = { code, itemName, categoryId, unitId, supplierId };
     const itemId = await ItemModel.addItem(itemData)
-    res.status(201).json({message: 'Item Added Successfully',itemId,itemData});
+    res.status(201).json({message: 'Item Added Successfully',itemId});
+  } catch (err) {
+    console.error('Error creating Product:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(409).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
   }
-  catch(err){
-    console.error('Error Adding Item:', err);
-    res.status(500).json({error: 'Error creating category'});
-  }
-
 };
 
 

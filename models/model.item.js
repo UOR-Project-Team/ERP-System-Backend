@@ -1,21 +1,5 @@
 const db = require('../connection');
 
-  // const addItem = async (itemData) => {
-  //   try{
-  //     const { code, itemName, categoryId, unitId, supplierId} = itemData;
-  
-  //     const query = 'INSERT INTO product (Code, Name, Category_ID,Unit_ID) VALUES (?,?,?,?)';
-  //     const values1 = [ code, itemName, categoryId, unitId]
-  //     const values2 = supplierId
-  //     const [results]= await db.execute(query,values1);
-
-  //     return results.insertId;
-  //   } catch (err){
-  //     throw err;
-  //   }
-
-  // };
-
   //Add item function when product table and supplier_product table is maintained separatly instead of adding supplier id in the product table
   const addItem = async (itemData) => {
     const { code, itemName, categoryId, unitId, supplierId } = itemData;
