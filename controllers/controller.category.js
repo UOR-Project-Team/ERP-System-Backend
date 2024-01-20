@@ -6,10 +6,14 @@ const createCategory = async (req, res) => {
     const categoryData = { Description };
 
     const categoryId = await categoryModel.createCategory(categoryData);
-    res.status(201).json({ message: 'Category created successfully', categoryId, Description });
+    res.status(201).json({ message: 'Category created successfully', categoryId });
   } catch (err) {
     console.error('Error creating category:', err);
-    res.status(500).json({ error: 'Error creating category' });
+    if (err.code === 'ER_DUP_ENTRY' || err.code === 1062) {
+      res.status(409).json({ message: `Category already Exists!` });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
   }
 };
 
