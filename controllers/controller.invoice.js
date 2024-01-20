@@ -56,11 +56,11 @@ const getAllItems = async (req, res) => {
         return res.status(401).json({ error: 'Invalid or missing parameters' });
       }
   
-      // for (const solditem of solditems) {
-      //   if (!solditem.productId || isNaN(solditem.quantity) || isNaN(solditem.s_price) || isNaN(solditem.barcode)) {
-      //     return res.status(402).json({ error: 'Invalid item data format' });
-      //   }
-      // }
+      for (const solditem of solditems) {
+        if (!solditem.productId || isNaN(solditem.quantity) || isNaN(solditem.s_price) || !solditem.barcode) {
+          return res.status(402).json({ error: 'Invalid item data format' });
+        }
+      }
 
       const invoice = await invoiceModel.addinvoice(invoiceNumber, Customerid,userid, solditems, totalAmount)
 

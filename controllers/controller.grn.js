@@ -40,13 +40,13 @@ const getItemsById = async (req, res) => {
 
       console.log('received')
       if (!grnNo || !supplierid || !userid || !Array.isArray(puchaseditems) || isNaN(totalAmount)) {
-        console.log('test 1')
+        //console.log('test 1')
         return res.status(400).json({ error: 'Invalid or missing parameters' });
       }
   
       for (const item of puchaseditems) {
         if (!item.productId || isNaN(item.quantity) || isNaN(item.purchase_price)) {
-          console.log('test 2')
+          //console.log('test 2')
           return res.status(400).json({ error: 'Invalid item data format' });
         }
       }
