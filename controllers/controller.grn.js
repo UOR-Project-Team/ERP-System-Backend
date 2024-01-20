@@ -19,7 +19,7 @@ const getSuppliers = async (req, res) => {
 const getItemsById = async (req, res) => {
     try {
       const supplierId = req.params.id;
-      const result = await grnModel.getAllItems();
+      const result = await grnModel.getAllItems(supplierId);
      // console.log('Items In data', data)
       if (result.length === 0) {
         return res.status(404).json({ error: 'Items not found!' });

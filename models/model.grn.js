@@ -12,12 +12,12 @@ const getAllSuppliers = async (searchvalue) => {
   }
 };
 
-const getAllItems = async () => {
+const getAllItems = async (supplierId) => {
 try {
     // Supplier_Id as input
-    //const query = 'SELECT Product.ID, Product.Code, Product.Name FROM Product RIGHT JOIN Supplier_Product ON Product.ID = Supplier_Product.Product_ID WHERE Supplier_Product.Supplier_ID = ?';
-    const query = 'SELECT ID, Code, Name FROM product';
-    const [results] = await db.execute(query);
+    const query = 'SELECT Product.ID, Product.Code, Product.Name, Product.Unit_Mean_Price FROM Product RIGHT JOIN Supplier_Product ON Product.ID = Supplier_Product.Product_ID WHERE Supplier_Product.Supplier_ID = ?';
+    //const query = 'SELECT ID, Code, Name FROM product';
+    const [results] = await db.execute(query,[supplierId]);
     //console.log(results)
     return results;
 } catch (err) {
@@ -59,7 +59,16 @@ const addgrn = async(grnNo,supplierid,userid,items,totalAmount)=>{
       if (purchaseproductQuery.insertId < 0) {
         throw new Error('Error inserting purchase item');
       }
+
+      const priceupdateQuery = 'UPDATE Product SET Unit_Mean_Price = ? WHERE ID = ?';
+      const UnitPriceResult = await connection.execute(priceupdateQuery,[unitprice, productId]);
+
+      if (UnitPriceResult.insertId < 0) {
+        throw new Error('Error inserting purchase item');
+      }
+
     }
+
 
     await connection.commit();
     connection.release();
