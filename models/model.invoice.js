@@ -15,9 +15,9 @@ try {
    // const query = 'SELECT ID, Code, Name FROM Product';
    const query = `SELECT 
                       purchase_product.Product_ID AS ID, 
-                      purchase_product.Unit_Price, 
+                      MAX(purchase_product.Unit_Price), 
                       product.Code AS Code,
-                      purchase_product.Barcode AS Barcode,
+                      MAX(purchase_product.Barcode) AS Barcode,
                       product.Name AS Name, 
                       SUM(purchase_item.Quantity) AS Total_Quantity
                     FROM 
