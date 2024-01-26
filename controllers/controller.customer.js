@@ -1,9 +1,20 @@
+const validateCustomer = require('./validator.customer');
 const customerModel = require('../models/model.customer');
 
 const createCustomer = async (req, res) => {
   try {
-    const { title, fullname, email, nic, contactno, street1, street2, city, country, vatno } = req.body;
-    const data = { title, fullname, email, nic, contactno, street1, street2, city, country, vatno };
+    const data = req.body;
+
+    //validate the input data
+    const validationErrors = validateCustomer(data);
+
+    // Check if there are validation errors
+    const hasValidationErrors = Object.values(validationErrors).some((error) => !!error);
+
+    if (hasValidationErrors) {
+      return res.status(400).json({ message: 'Invalid Submission!!!' });
+    }
+    
     const customerId = await customerModel.createCustomer(data);
     res.status(201).json({ message: 'Customer created successfully', customerId });
   } catch (err) {
@@ -48,6 +59,17 @@ const updateCustomer = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
+
+    //validate the input data
+    const validationErrors = validateCustomer(data);
+
+    // Check if there are validation errors
+    const hasValidationErrors = Object.values(validationErrors).some((error) => !!error);
+
+    if (hasValidationErrors) {
+      return res.status(400).json({ message: 'Invalid Submission!!!' });
+    }
+
     await customerModel.updateCustomer(id, data);
     res.status(200).json({ message: 'Customer updated successfully' });
   } catch (err) {

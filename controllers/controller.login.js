@@ -26,12 +26,17 @@ const loginUser = async (req, res) => {
                   userid : results[0].ID,
                   username: results[0].Username,
                   fullname: results[0].Fullname,
+                  email: results[0].Email,
+                  nic: results[0].NIC,
                   jobrole: results[0].JobRole,
-                  loginflag: results[0].Loginflag, 
+                  contactno: results[0].ContactNo,
+                  address: results[0].Address,
+                  city: results[0].City,
+                  loginflag: results[0].Loginflag,
                 }, process.env.JWT_SECRET, {
                   expiresIn: '1h',
                 });
-                LoginModel.updateloginflag(username, (updateErr, loginflag) => {
+                LoginModel.updateloginflag(username, (updateErr) => {
                   if (updateErr) {
                     console.error('Error updating login flag:', updateErr);
                     return res.status(500).json({ error: 'Error Authenticating User' });
@@ -78,5 +83,23 @@ const resetPasswordController = async(req, res)=>{
         res.status(500).json({ error: 'Internal Server Error' });
       }
 }
+
+const changePasswordController = async (req, res) => {
+  try {
+    let hash = '';
+    const userid = req.params.id;
+    const currentPW = req.body.currentPW;
+    const newPW = req.body.newPW;
+
+    
+
+    await userModel.updateProfile(userid, userData);
+    res.status(200).json({ message: 'Password updated successfully' });
+
+  } catch (err) {
+    console.error('Error updating password:', err);
+    res.status(500).json({ message: 'Error occurred while updating!' });
+  }
+};
 
 module.exports = {loginUser,resetPasswordController}

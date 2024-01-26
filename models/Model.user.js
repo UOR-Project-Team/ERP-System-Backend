@@ -96,6 +96,19 @@ const addUser = async (userData) => {
     }
   };
 
+  const updateProfile = async (id, newuserData) => {
+    try {
+      const connection = await db.getConnection();
+      const { fullname, email, NIC, contactno, address, city } = newuserData;
+      let sqlQuery = 'UPDATE user SET Fullname = ?, Email = ?, NIC = ?, ContactNo = ?, Address = ?, City = ? WHERE ID = ?;';
+      let values = [fullname, email, NIC, contactno, address, city, id];
+      const [result] = await connection.execute(sqlQuery, values);
+      connection.release();
+    } catch(err) {
+      throw err;
+    }
+  };
+
   const searchuser = async(term)=>{
     try{
       const connection = await db.getConnection();
@@ -112,4 +125,4 @@ const addUser = async (userData) => {
   }
   }
 
-module.exports = { getUsers,GetuserID,addUser,DeleteuserByID,updateUser,searchuser };
+module.exports = { getUsers,GetuserID,addUser,DeleteuserByID,updateUser, updateProfile, searchuser };

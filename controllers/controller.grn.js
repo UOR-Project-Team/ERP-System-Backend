@@ -1,5 +1,22 @@
 const grnModel = require('../models/model.grn');
 
+const getGRNNumbers = async (req, res) => {
+  try {
+    const grnNo = req.params.id;
+    const grns = await grnModel.compareGRNID(grnNo);
+   
+    if (grns.length > 0) {
+      res.status(200).json({ message: 1 });
+    } else {
+      res.status(200).json({ message: 0 });
+    }
+    
+  } catch (err) {
+    console.error('Error fetching grns:', err);
+    res.status(500).json({ error: 'Error occured while read!' });
+  }
+};
+
 const getSuppliers = async (req, res) => {
   try {
     //const search = req.query.term;
@@ -65,4 +82,4 @@ const getItemsById = async (req, res) => {
     }
   }
 
-module.exports = { getSuppliers,  getItemsById, grnlist };
+module.exports = { getGRNNumbers, getSuppliers,  getItemsById, grnlist };

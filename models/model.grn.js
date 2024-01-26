@@ -1,5 +1,17 @@
 const db = require('../connection');
 
+const compareGRNID = async (id) => {
+  try {
+    const connection = await db.getConnection();
+    const query = 'SELECT * FROM grn WHERE No = ?';
+    const [results] = await connection.execute(query, [id]);
+    connection.release();
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const getAllSuppliers = async (searchvalue) => {
   try {
     const connection = await db.getConnection();
@@ -84,4 +96,4 @@ const addgrn = async(grnNo,supplierid,userid,items,totalAmount)=>{
 }
   }
 
-module.exports = { getAllSuppliers,  getAllItems, addgrn };
+module.exports = { compareGRNID, getAllSuppliers,  getAllItems, addgrn };
