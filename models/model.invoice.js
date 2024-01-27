@@ -14,24 +14,24 @@ const getAllItems = async () => {
 try {
    // const query = 'SELECT ID, Code, Name FROM Product';
    const query = `SELECT 
-                      purchase_product.Product_ID AS ID, 
-                      purchase_product.Unit_Price, 
-                      product.Code AS Code,
-                      purchase_product.Barcode AS Barcode,
-                      product.Name AS Name, 
-                      SUM(purchase_item.Quantity) AS Total_Quantity
-                    FROM 
-                      purchase_product 
-                    JOIN 
-                      purchase_item ON purchase_product.Purchase_Item_ID = purchase_item.ID 
-                    JOIN 
-                      product ON purchase_product.Product_ID = product.ID 
-                    WHERE
-                      purchase_item.Quantity > 0
-                    GROUP BY 
-                      purchase_product.Product_ID 
+                  purchase_product.Product_ID AS ID, 
+                  MAX(purchase_product.Unit_Price), 
+                  product.Code AS Code,
+                  MAX(purchase_product.Barcode) AS Barcode,
+                  product.Name AS Name, 
+                  SUM(purchase_item.Quantity) AS Total_Quantity
+                FROM 
+                  purchase_product 
+                JOIN 
+                  purchase_item ON purchase_product.Purchase_Item_ID = purchase_item.ID 
+                JOIN 
+                  product ON purchase_product.Product_ID = product.ID 
+                WHERE
+                  purchase_item.Quantity > 0
+                GROUP BY 
+                  purchase_product.Product_ID 
                       
-     `;
+                 `;
      //purchase_product.Unit_Price;
     const [results] = await db.execute( query );
     //console.log(results);
