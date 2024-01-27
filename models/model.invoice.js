@@ -127,6 +127,62 @@ const getAllInvoices = async () =>{
   }
 }
 
+const getInvoiceByNo = async (invoiceNo)=>{
+  try{
+    const query = `
+    SELECT
+      invoice.*,
+      user.Fullname AS UserName,
+      customer.Fullname AS CustomerName,
+      customer.ContactNo AS CustomerContact
+    FROM
+      invoice
+      JOIN user ON invoice.User_ID = user.ID
+      JOIN customer ON invoice.Customer_ID = customer.ID
+    WHERE
+      invoice.No = ?;
+  `;
+  
+    const [results] = await db.execute(query, [invoiceNo]);
+    console.log("working");
+    
+    return results;
+} catch (err){
+    throw err;
+}
+}
+
+const getSalesItemsByNo = async (invoiceNo) =>{
+  try{
+
+    const query = `
+    SELECT
+    P.Name AS ProductName,
+    P.Code,
+    PP.Unit_Price AS UnitPrice,
+    S.Quantity
+    FROM
+    Sale_Item S
+    JOIN
+    Purchase_Product PP ON S.Purchase_Product_ID = PP.ID
+    JOIN
+    Product P ON PP.Product_ID = P.ID
+    WHERE
+    S.Invoice_No = ?;
 
 
-module.exports = { getAllCustomers,  getAllItems , getItemPriceById,addinvoice, getAllInvoices };
+  `;
+
+      const [results] = await db.execute(query, [invoiceNo]);
+      console.log("working for item");
+      
+      
+      return results;
+  } catch (err){
+      throw err;
+  }
+}
+
+
+
+module.exports = { getAllCustomers,  getAllItems , getItemPriceById,addinvoice, getAllInvoices ,getInvoiceByNo , getSalesItemsByNo};
