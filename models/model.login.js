@@ -2,6 +2,7 @@ const db = require('../connection')
 
 const loginUser = async(username) => {
 
+  try{
   const connection = await db.getConnection();
   const query = "SELECT * FROM user where Username = ? ";
 
@@ -10,7 +11,10 @@ const loginUser = async(username) => {
     
     return results;
   
-};
+}catch(error){
+  throw new Error(`Error fetching users: ${error.message}`);
+}
+}
 
 
 const resetpassword = async(username, newpassword) =>{
