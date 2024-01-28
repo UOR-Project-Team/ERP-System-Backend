@@ -1,10 +1,10 @@
 const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   password: '',
-  database: 'erp_systemdb',
+  database: process.env.DB_DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
