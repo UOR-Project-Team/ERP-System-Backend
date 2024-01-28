@@ -1,5 +1,4 @@
 /node_modules
-/dbConfig.js
-/connection.js
+./DigiCertGlobalRootCA.crt.pem
 .env
 
