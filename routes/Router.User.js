@@ -8,7 +8,8 @@ router.get('/show', userController.getUsersController);
 router.get('/getuser/:id', userController.getUserByIDController);
 router.delete('/delete/:id',userController.deleteuserByIDcontroller);
 router.put('/update/:id',userController.updateUserController);
-
+router.put('/profile/:id',userController.updateProfileController);
+router.put('/changePW/:id',userController.updateProfileController);
 router.get('/search', userController.searchUser);
 
 module.exports = router;

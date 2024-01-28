@@ -1,9 +1,11 @@
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+require('dotenv').config();
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  password: '',
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
@@ -16,7 +18,7 @@ db.getConnection()
     connection.release();
   })
   .catch(error => {
-    console.error('Error ocured while connecting to the database');
+    console.error('Error occurred while connecting to the database:', error);
   });
 
 module.exports = db;
