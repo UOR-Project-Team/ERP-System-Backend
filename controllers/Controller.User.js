@@ -27,39 +27,33 @@ const getUserByIDController = async(req, res)=>{
 }
 
 const AddUserController = async (req, res)=>{
-    try{
-        const password = req.body.password.toString();
-        
-        const hash =await hashPassword(password);
-        
-    
-
+  try {
+    const password = req.body.password.toString();
+    const hash =await hashPassword(password);
     const userData = {
-        Fullname: req.body.Fullname,
-        email: req.body.email,
-        username: req.body.username,
-        password: hash,
-        NIC:req.body.NIC,
-        jobrole: req.body.jobrole,
-        contactno: req.body.contactno,
-        address: req.body.address,
-        city: req.body.city,
-      };
+      Fullname: req.body.Fullname,
+      email: req.body.email,
+      username: req.body.username,
+      password: hash,
+      NIC:req.body.NIC,
+      jobrole: req.body.jobrole,
+      contactno: req.body.contactno,
+      address: req.body.address,
+      city: req.body.city,
+    };
 
-
-        const newuser = await userModel.addUser(userData);
-
-        res.status(200).json({message: 'User inserted successfully', userId: newuser})
-    }catch (err) {
-      console.error('Error creating customer:', err);
-      if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
-        const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
-        const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
-        res.status(400).json({ message: `Duplicate Entry!`, attributeName });
-      } else {
-        res.status(500).json({ message: 'Error occurred while creation!' });
-      }
-      }
+    const newuser = await userModel.addUser(userData);
+    res.status(200).json({message: 'User inserted successfully', userId: newuser})
+  } catch (err) {
+    console.error('Error creating user:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while creation!' });
+    }
+  }
 }
 
 const deleteuserByIDcontroller = async(req, res) =>{
@@ -128,7 +122,34 @@ const updateUserController = async (req, res) => {
     } else {
       res.status(500).json({ message: 'Error occurred while creation!' });
     }
+  }
+};
+
+const updateProfileController = async (req, res) => {
+  try {
+    const updateid = req.params.id;
+    const userData = {
+      fullname: req.body.fullname,
+      email: req.body.email,
+      NIC: req.body.NIC,
+      contactno: req.body.contactno,
+      address: req.body.address,
+      city: req.body.city
+    };
+
+    await userModel.updateProfile(updateid, userData);
+    res.status(200).json({ message: 'Profile updated successfully' });
+
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+      const attributeNameMatch = err.sqlMessage.match(/for key '(.+?)'/);
+      const attributeName = attributeNameMatch ? attributeNameMatch[1] : 'unknown';
+      res.status(400).json({ message: `Duplicate Entry!`, attributeName });
+    } else {
+      res.status(500).json({ message: 'Error occurred while updating!' });
     }
+  }
 };
 
 const searchUser = async(req, res)=>{
@@ -145,4 +166,4 @@ const searchUser = async(req, res)=>{
 }
 }
 
-module.exports = { getUsersController,getUserByIDController,AddUserController,deleteuserByIDcontroller,updateUserController,searchUser };
+module.exports = { getUsersController,getUserByIDController,AddUserController,deleteuserByIDcontroller,updateUserController,updateProfileController,searchUser };
