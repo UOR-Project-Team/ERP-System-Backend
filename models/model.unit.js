@@ -3,10 +3,10 @@ const db = require('../connection');
 const createUnit = async (unitData) => {
   try {
     const { Description , SI } = unitData;
-
+    const connection = await db.getConnection();
     const query = 'INSERT INTO Product_Unit (Description ,SI) VALUES (? , ?)';
-    const [results] = await db.execute(query, [Description , SI]);
-
+    const [results] = await connection.execute(query, [Description , SI]);
+    connection.release();
     return results.insertId;
   } catch (err) {
     throw err;
@@ -14,9 +14,11 @@ const createUnit = async (unitData) => {
 };
 
 const getAllUnits = async () => {
-  try {
-    const query = 'SELECT * FROM Product_Unit';
-    const [results] = await db.execute(query);
+  try { 
+    const connection = await db.getConnection();
+    const query = 'SELECT * FROM product_unit';
+    const [results] = await connection.execute(query);
+    connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -25,8 +27,10 @@ const getAllUnits = async () => {
 
 const deleteUnit = async (unitId) => {
   try {
-    const query = 'DELETE FROM Product_Unit WHERE ID = ?';
-    await db.query(query, [unitId]);
+    const connection = await db.getConnection();
+    const query = 'DELETE FROM product_unit WHERE ID = ?';
+    await connection.query(query, [unitId]);
+    connection.release();
   } catch (err) {
     throw err;
   }
@@ -35,9 +39,10 @@ const deleteUnit = async (unitId) => {
 const updateUnit = async (unitId, unitData) => {
   try {
     const { Description , SI } = unitData;
-
-    const query = 'UPDATE Product_Unit SET Description = ? , SI = ?  WHERE id = ?';
-    await db.query(query, [Description, SI, unitId]);
+    const connection = await db.getConnection();
+    const query = 'UPDATE product_unit SET Description = ? , SI = ?  WHERE id = ?';
+    await connection.query(query, [Description, SI, unitId]);
+    connection.release();
   } catch (err) {
     throw err;
   }
@@ -45,11 +50,11 @@ const updateUnit = async (unitId, unitData) => {
 
 const getUnitById = async (categoryId , SI) => {
   try {
-    const query = 'SELECT * FROM Product_Unit WHERE id = ?';
-    const [results] = await db.execute(query, [categoryId , SI]);
-    return results[0];
-
-  
+    const connection = await db.getConnection();
+    const query = 'SELECT * FROM product_unit WHERE id = ?';
+    const [results] = await connection.execute(query, [categoryId , SI]);
+    connection.release();
+    return results[0]; 
   } catch (err) {
     throw err;
   }
