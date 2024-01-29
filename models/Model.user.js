@@ -1,5 +1,5 @@
 const db = require('../connection');
-const nodemailer = require('nodemailer');
+//const nodemailer = require('nodemailer');
 
 const getUsers = async () => {
   try {

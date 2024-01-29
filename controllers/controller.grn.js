@@ -36,7 +36,7 @@ const getSuppliers = async (req, res) => {
 const getItemsById = async (req, res) => {
     try {
       const supplierId = req.params.id;
-      const result = await grnModel.getAllItems();
+      const result = await grnModel.getAllItems(supplierId);
      // console.log('Items In data', data)
       if (result.length === 0) {
         return res.status(404).json({ error: 'Items not found!' });
@@ -57,13 +57,13 @@ const getItemsById = async (req, res) => {
 
       console.log('received')
       if (!grnNo || !supplierid || !userid || !Array.isArray(puchaseditems) || isNaN(totalAmount)) {
-        console.log('test 1')
+        //console.log('test 1')
         return res.status(400).json({ error: 'Invalid or missing parameters' });
       }
   
       for (const item of puchaseditems) {
         if (!item.productId || isNaN(item.quantity) || isNaN(item.purchase_price)) {
-          console.log('test 2')
+          //console.log('test 2')
           return res.status(400).json({ error: 'Invalid item data format' });
         }
       }

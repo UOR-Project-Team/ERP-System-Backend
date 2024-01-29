@@ -4,8 +4,8 @@ const ItemModel = require('../models/model.item');
 const Additem = async (req, res) => {
 
   try{
-    const { code, itemName, categoryId, unitId, supplierId } = req.body;
-    const itemData = { code, itemName, categoryId, unitId, supplierId };
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity } = req.body;
+    const itemData = { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity };
     const itemId = await ItemModel.addItem(itemData)
     res.status(201).json({message: 'Item Added Successfully',itemId});
   } catch (err) {
@@ -43,8 +43,8 @@ const deleteItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try{
     const itemId = req.params.id
-    const { code, itemName, categoryId, unitId, supplierId } = req.body;
-    const itemData = { code, itemName, categoryId, unitId, supplierId };
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel,reorderQuantity } = req.body;
+    const itemData = { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity };
     await ItemModel.updateItem(itemData, itemId);
     res.status(200).json({message: 'Item has been updated successfully'});
   }

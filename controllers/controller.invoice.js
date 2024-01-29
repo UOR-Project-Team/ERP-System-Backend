@@ -53,12 +53,12 @@ const getAllItems = async (req, res) => {
       const { invoiceNumber, Customerid, userid, solditems, totalAmount } = req.body;
 
       if (!invoiceNumber || !userid || !Array.isArray(solditems) || isNaN(totalAmount)) {
-        return res.status(400).json({ error: 'Invalid or missing parameters' });
+        return res.status(401).json({ error: 'Invalid or missing parameters' });
       }
   
       for (const solditem of solditems) {
-        if (!solditem.productId || isNaN(solditem.quantity) || isNaN(solditem.s_price) || isNaN(solditem.barcode)) {
-          return res.status(400).json({ error: 'Invalid item data format' });
+        if (!solditem.productId || isNaN(solditem.quantity) || isNaN(solditem.s_price) || !solditem.barcode) {
+          return res.status(402).json({ error: 'Invalid item data format' });
         }
       }
 
@@ -95,4 +95,40 @@ const getAllItems = async (req, res) => {
     }
   };
 
-module.exports = { getCustomers,  getItemPriceById , getAllItems,addinvoicelist, getAllInvoices };
+  const getInvoiceByNo = async (req, res) => {
+    try {
+      const invoiceNo = req.params.id;
+      const data = await invoiceModel.getInvoiceByNo(invoiceNo);
+      console.log("controller work");
+  
+      if (!data) {
+        return res.status(404).json({ error: 'Invoice not found!' });
+      }
+
+      res.status(200).json(data);
+
+    } catch (err) {
+      console.error('Error fetching invoice:', err);
+      res.status(500).json({ error: 'Error occured while read!' });
+    }
+  };
+
+  const getSalesItemsByNo = async (req, res) => {
+    try {
+      const invoiceNo = req.params.id;
+      const data = await invoiceModel.getSalesItemsByNo(invoiceNo);
+      console.log("controller work for item");
+  
+      if (!data) {
+        return res.status(404).json({ error: 'Sales items not found!' });
+      }
+
+      res.status(200).json(data);
+
+    } catch (err) {
+      console.error('Error fetching sales items:', err);
+      res.status(500).json({ error: 'Error occured while read!' });
+    }
+  };
+
+module.exports = { getCustomers,  getItemPriceById , getAllItems,addinvoicelist, getAllInvoices ,getInvoiceByNo ,getSalesItemsByNo };
