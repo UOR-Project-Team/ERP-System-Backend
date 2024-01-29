@@ -1,4 +1,4 @@
 /node_modules
-./DigiCertGlobalRootCA.crt.pem
+.DigiCertGlobalRootCA.crt.pem
 .env
 

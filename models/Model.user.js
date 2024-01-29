@@ -24,7 +24,7 @@ const GetuserID =async(id)=>{
 
     const sqlQuery = 'SELECT * FROM user WHERE ID = ?';
 
-    const [result, fields] = await connection.execute(sqlQuery,[id]);
+    const [result] = await connection.execute(sqlQuery,[id]);
     connection.release();
 
     return result;
@@ -102,7 +102,7 @@ const addUser = async (userData) => {
       const { fullname, email, NIC, contactno, address, city } = newuserData;
       let sqlQuery = 'UPDATE user SET Fullname = ?, Email = ?, NIC = ?, ContactNo = ?, Address = ?, City = ? WHERE ID = ?;';
       let values = [fullname, email, NIC, contactno, address, city, id];
-      const [result] = await connection.execute(sqlQuery, values);
+      await connection.execute(sqlQuery, values);
       connection.release();
     } catch(err) {
       throw err;
@@ -123,6 +123,31 @@ const addUser = async (userData) => {
   }catch(err){
     throw err;
   }
+  
   }
 
-module.exports = { getUsers,GetuserID,addUser,DeleteuserByID,updateUser, updateProfile, searchuser };
+  const verifyPassword = async(userid) =>{
+
+    try{
+      const connection = await db.getConnection();
+      const sqlQuery = 'Select Password from user WHERE id = ?';
+      const [result] = await connection.execute( sqlQuery, [userid]);
+      connection.release();
+      return result;
+      } catch(error) {
+          throw new Error(`${error.message}`);
+      }
+  }
+
+  const updatePassword = async(userid, newpassword) =>{
+    try{
+      const connection = await db.getConnection();
+      const sqlQuery = 'UPDATE user set password=? WHERE id = ?';
+      await connection.execute( sqlQuery, [newpassword, userid]);
+      connection.release();
+      } catch(error) {
+          throw new Error(`${error.message}`);
+      } 
+  }
+
+module.exports = { getUsers,GetuserID,addUser,DeleteuserByID,updateUser, updateProfile, searchuser, verifyPassword, updatePassword };

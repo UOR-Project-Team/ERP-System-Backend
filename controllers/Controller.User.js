@@ -1,5 +1,6 @@
-const db = require('../connection');
+const bcrypt = require('bcrypt');
 const userModel = require('../models/Model.user');
+const jwt = require('jsonwebtoken');
 const {hashPassword} = require('./controller.password');
 
 const getUsersController = async (req, res) => {
@@ -138,7 +139,7 @@ const updateProfileController = async (req, res) => {
     };
 
     await userModel.updateProfile(updateid, userData);
-    res.status(200).json({ message: 'Profile updated successfully' });
+    res.status(200).json({ message: 'User updated successfully' });
 
   } catch (err) {
     console.error('Error updating profile:', err);
@@ -166,4 +167,74 @@ const searchUser = async(req, res)=>{
 }
 }
 
-module.exports = { getUsersController,getUserByIDController,AddUserController,deleteuserByIDcontroller,updateUserController,updateProfileController,searchUser };
+const verifyPassword = async (req, res) => {
+  try {
+    const updateid = req.params.id;
+    const password = req.body.currentPW.toString();
+
+    const userPassword =await userModel.verifyPassword(updateid);
+
+    if (userPassword.length > 0) {
+      // Assuming userPassword[0].password contains the hashed password from the database
+      const hashedDbPassword = userPassword[0].Password;
+
+      bcrypt.compare(password, hashedDbPassword, (compareErr, compareResult) => {
+        if (compareErr) {
+          return res.status(500).json({ message: "Error occured while password matching" });
+        }
+        if (compareResult) {
+          res.status(200).json({ message: "Password matched" });
+        } else {
+          res.status(401).json({ message: "Password mismatched" });
+        }
+      });
+
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+
+  } catch (err) {
+    console.error('[Error] :', err);
+    res.status(500).json({ message: 'Error ocured while verification!' });
+  }
+};
+
+const updatePassword = async(req, res)=>{
+  try{
+    const userid = req.params.id
+    const password = req.body.newPW.toString();
+    const newhashpassword =await hashPassword(password);
+    await userModel.updatePassword(userid,newhashpassword);
+    res.status(200).json({message: 'User Password Change successfully'})
+  } catch (error) {
+    console.error('[Error] :', error);
+    res.status(500).json({ error: 'Error occured while reset password!' });
+  }
+}
+
+const getUserToken = async(req, res)=>{
+  try{
+    const userid = req.params.id;
+    const getUser = await userModel.GetuserID(userid);
+    const token = jwt.sign({
+      userid : getUser[0].ID,
+      username: getUser[0].Username,
+      fullname: getUser[0].Fullname,
+      email: getUser[0].Email,
+      nic: getUser[0].NIC,
+      jobrole: getUser[0].JobRole,
+      contactno: getUser[0].ContactNo,
+      address: getUser[0].Address,
+      city: getUser[0].City,
+      loginflag: getUser[0].Loginflag,
+    }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    res.status(200).json({ message: 'User retrieved successfully', token });
+    } catch(err) {
+      res.status(500).json({ error: err.message });
+    }
+}
+
+
+module.exports = { getUsersController,getUserByIDController,AddUserController,deleteuserByIDcontroller,updateUserController,updateProfileController,searchUser, verifyPassword, updatePassword, getUserToken };
