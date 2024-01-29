@@ -2,9 +2,9 @@ const db = require('../connection');
 
   //Add item function when product table and supplier_product table is maintained separatly instead of adding supplier id in the product table
   const addItem = async (itemData) => {
-    const { code, itemName, categoryId, unitId, supplierId } = itemData;
-    const query = 'INSERT INTO product (Code, Name, Category_ID, Unit_ID) VALUES (?,?,?,?)';
-    const values = [code, itemName, categoryId, unitId];
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity } = itemData;
+    const query = 'INSERT INTO product (Code, Name, Category_ID, Unit_ID, Reorder_Level, Reorder_Quantity) VALUES (?,?,?,?,?,?)';
+    const values = [code, itemName, categoryId, unitId, reorderLevel, reorderQuantity];
     
     // Get a connection from the pool
     const connection = await db.getConnection();
@@ -114,11 +114,11 @@ const db = require('../connection');
   const updateItem = async (itemData,itemId) => {
 
     const connection = await db.getConnection();
-    const query1 = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+    const query1 = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=?, Reorder_Level=?, Reorder_Quantity=?  WHERE ID = ?';
     const query2 = 'UPDATE supplier_product SET Supplier_ID=? WHERE Product_ID = ?';
 
-    const { code, itemName, categoryId, unitId, supplierId } = itemData;
-    const values1 = [ code, itemName, categoryId, unitId, itemId ]
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity } = itemData;
+    const values1 = [ code, itemName, categoryId, unitId, reorderLevel, reorderQuantity, itemId ]
     const values2 = [supplierId,itemId]
     console.log("update request reached model item");
     try{
