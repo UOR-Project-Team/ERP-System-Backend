@@ -27,10 +27,10 @@ const getAllSuppliers = async (searchvalue) => {
 const getAllItems = async (supplierId) => {
 try {
     // Supplier_Id as input
+    const connection = await db.getConnection();
     const query = 'SELECT Product.ID, Product.Code, Product.Name, Product.Unit_Mean_Price FROM Product RIGHT JOIN Supplier_Product ON Product.ID = Supplier_Product.Product_ID WHERE Supplier_Product.Supplier_ID = ?';
-    //const query = 'SELECT ID, Code, Name FROM product';
-    const [results] = await db.execute(query,[supplierId]);
-    //console.log(results)
+    const [results] = await connection.execute(query,[supplierId]);
+    connection.release();
     return results;
 } catch (err) {
     throw err;
