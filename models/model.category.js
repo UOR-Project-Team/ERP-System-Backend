@@ -15,7 +15,6 @@ const createCategory = async (categoryData) => {
 
 const getAllCategories = async () => {
   try {
-    
     const connection = await db.getConnection();
     const query = 'SELECT * FROM Product_Category';
     const [results] = await connection.execute(query);
@@ -56,8 +55,6 @@ const getCategoryById = async (categoryId) => {
     const [results] = await connection.execute(query, [categoryId]);
     connection.release();
     return results[0];
-
-  
   } catch (err) {
     throw err;
   }
