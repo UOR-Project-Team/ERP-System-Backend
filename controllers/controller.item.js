@@ -98,4 +98,15 @@ const getAllItemsBySupplier = async (req, res) => {
   }
 };
 
-module.exports = { Additem,deleteItem, updateItem, getAllItems, getAllItemsByUnit, getAllItemsByCategory, getAllItemsBySupplier };
+const getProductCode = async (req, res) => {
+  try {
+    
+    const productCode =  await ItemModel.getProductCode();
+    res.status(200).json(productCode);
+  } catch (err) {
+    console.error('Error fetching product code :', err);
+    res.status(500).json({ error: 'Error occured while generating product code!' });
+  }
+};
+
+module.exports = { Additem,deleteItem, updateItem, getAllItems, getAllItemsByUnit, getAllItemsByCategory, getAllItemsBySupplier, getProductCode };
