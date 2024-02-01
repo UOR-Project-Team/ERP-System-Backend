@@ -1,18 +1,20 @@
-const db1 = require('../dbConfig')
 const db = require('../connection')
 
-const loginUser = async(username, callback) => {
+const loginUser = async(username) => {
 
-
+  try{
+  const connection = await db.getConnection();
   const query = "SELECT * FROM user where Username = ? ";
 
-  db1.query(query, username, (err, results) => {
-    if (err) {
-      return callback(err, null);
-    }
-    return callback(null, results);
-  });
-};
+  const [results, fields] = await connection.execute(query,[username]);
+  connection.release();
+    
+    return results;
+  
+}catch(error){
+  throw new Error(`Error fetching users: ${error.message}`);
+}
+}
 
 
 const resetpassword = async(username, newpassword) =>{

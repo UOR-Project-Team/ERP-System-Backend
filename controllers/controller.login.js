@@ -9,38 +9,39 @@ const loginUser = async (req, res) => {
         const username = req.body.username;
         const password = req.body.password.toString();
     
-        LoginModel.loginUser(username, (err, results) => {
-          if (err) {
+        const loginResult = await LoginModel.loginUser(username);
+          if (!loginResult) {
             console.error('Error Authenticating User:', err);
             return res.status(500).json({ error: 'Error Authenticating User' });
-          } else if (results.length > 0) {
-            const storedHash = results[0].Password;
+          } else if (loginResult.length > 0) {
+            const storedHash = loginResult[0].Password;
     
             bcrypt.compare(password, storedHash, (compareErr, compareResult) => {
               if (compareErr) {
-                return res.status(500).json({ error: 'Error Authenticating User' });
+                return res.status(500).json({ error: 'Error Authenticating User Wrong Password' });
               }
               if (compareResult) {
                 console.log(compareResult)
                 const token = jwt.sign({
-                  userid : results[0].ID,
-                  username: results[0].Username,
-                  fullname: results[0].Fullname,
-                  email: results[0].Email,
-                  nic: results[0].NIC,
-                  jobrole: results[0].JobRole,
-                  contactno: results[0].ContactNo,
-                  address: results[0].Address,
-                  city: results[0].City,
-                  loginflag: results[0].Loginflag,
+                  userid : loginResult[0].ID,
+                  username: loginResult[0].Username,
+                  fullname: loginResult[0].Fullname,
+                  email: loginResult[0].Email,
+                  nic: loginResult[0].NIC,
+                  jobrole: loginResult[0].JobRole,
+                  contactno: loginResult[0].ContactNo,
+                  address: loginResult[0].Address,
+                  city: loginResult[0].City,
+                  loginflag: loginResult[0].Loginflag,
                 }, process.env.JWT_SECRET, {
                   expiresIn: '1h',
                 });
-                LoginModel.updateloginflag(username, (updateErr) => {
-                  if (updateErr) {
+
+                const updateResult = LoginModel.updateloginflag(username);
+                  if (updateResult <= 0) {
                     console.error('Error updating login flag:', updateErr);
                     return res.status(500).json({ error: 'Error Authenticating User' });
-                  }});
+                  };
                 res.status(200).json({ message: 'User Authenticated successfully', token });
                 
 
@@ -53,7 +54,6 @@ const loginUser = async (req, res) => {
             res.status(401).json({ error: 'Invalid credentials' });
 
           }
-        });
 
       } catch (error) {
         console.error('Error during login:', error);

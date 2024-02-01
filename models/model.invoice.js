@@ -2,8 +2,10 @@ const db = require('../connection');
 
 const getAllCustomers = async () => {
   try {
+    const connection = await db.getConnection();
     const query = 'SELECT ID, Title, Fullname, ContactNo FROM Customer';
-    const [results] = await db.execute(query);
+    const [results] = await connection.execute(query);
+    connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -12,7 +14,7 @@ const getAllCustomers = async () => {
 
 const getAllItems = async () => {
 try {
-   // const query = 'SELECT ID, Code, Name FROM Product';
+   const connection = await db.getConnection();
    const query = `SELECT 
                   purchase_product.Product_ID AS ID, 
                   MAX(purchase_product.Unit_Price), 
@@ -33,8 +35,8 @@ try {
                       
                  `;
      //purchase_product.Unit_Price;
-    const [results] = await db.execute( query );
-    //console.log(results);
+    const [results] = await connection.execute( query );
+    connection.release();
     return results;
 } catch (err) {
     throw err;
@@ -43,10 +45,10 @@ try {
 
 const getItemPriceById = async (ProductId) =>{
     try{
+      const connection = await db.getConnection();
         const query = 'SELECT id,Barcode, Unit_Price FROM Purchase_Product where Product_ID = ?';
-        const [results] = await db.execute(query, [ProductId]);
-        
-        
+        const [results] = await connection.execute(query, [ProductId]);
+        connection.release();
         return results;
     } catch (err){
         throw err;
@@ -108,6 +110,7 @@ const addinvoice = async(invoiceNo, customerid,userid, items, totalAmount)=>{
 
 const getAllInvoices = async () =>{
   try{
+    const connection = await db.getConnection();
       const query= `SELECT
                   invoice.*,
                   user.Fullname AS UserName,
@@ -120,7 +123,8 @@ const getAllInvoices = async () =>{
                   ORDER BY
                     invoice.ID;
                   `
-      const [results] = await db.execute(query);
+      const [results] = await connection.execute(query);
+      connection.release();
       return results;
   } catch (err){
       throw err;
@@ -129,6 +133,7 @@ const getAllInvoices = async () =>{
 
 const getInvoiceByNo = async (invoiceNo)=>{
   try{
+    const connection = await db.getConnection();
     const query = `
     SELECT
       invoice.*,
@@ -143,9 +148,8 @@ const getInvoiceByNo = async (invoiceNo)=>{
       invoice.No = ?;
   `;
   
-    const [results] = await db.execute(query, [invoiceNo]);
-    console.log("working");
-    
+    const [results] = await connection.execute(query, [invoiceNo]);
+    connection.release();
     return results;
 } catch (err){
     throw err;
@@ -154,7 +158,7 @@ const getInvoiceByNo = async (invoiceNo)=>{
 
 const getSalesItemsByNo = async (invoiceNo) =>{
   try{
-
+    const connection = await db.getConnection();
     const query = `
     SELECT
     P.Name AS ProductName,
@@ -173,10 +177,8 @@ const getSalesItemsByNo = async (invoiceNo) =>{
 
   `;
 
-      const [results] = await db.execute(query, [invoiceNo]);
-      console.log("working for item");
-      
-      
+      const [results] = await connection.execute(query, [invoiceNo]);  
+      connection.release();
       return results;
   } catch (err){
       throw err;
