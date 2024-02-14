@@ -244,8 +244,7 @@ const getProductCode = async ()=> {
       const result = await db.query(query);
 
       let maxCode = result[0][0].maxCode;
-      console.log(result)
-      console.log(maxCode);
+
       let newCode = "P001"; // Default starting code
 
       if (maxCode) {
