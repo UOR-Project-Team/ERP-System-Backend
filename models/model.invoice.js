@@ -45,7 +45,6 @@ try {
 
 const getItemPriceById = async (barcode) =>{
     try{
-<<<<<<< HEAD
         const query = `SELECT
         Purchase_Product.id,
         Purchase_Product.Barcode,
@@ -63,12 +62,6 @@ const getItemPriceById = async (barcode) =>{
         //console.log("Result", results)
         
         
-=======
-      const connection = await db.getConnection();
-        const query = 'SELECT id,Barcode, Unit_Price FROM Purchase_Product where Product_ID = ?';
-        const [results] = await connection.execute(query, [ProductId]);
-        connection.release();
->>>>>>> main
         return results;
     } catch (err){
         throw err;
