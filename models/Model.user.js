@@ -33,24 +33,14 @@ const GetuserID =async(id)=>{
   }
 }
 
-const addUser = async (userData) => {
+  const addUser = async (userData) => {
     try {
       const connection = await db.getConnection();
-  
       const { Fullname, email, username, password, NIC, jobrole, contactno, address, city} = userData;
-
-    const sqlQuery = 'INSERT INTO user (Fullname, Email, Username, Password, NIC, JobRole, ContactNo, Address, City, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)';
-    const values = [
-      Fullname, email, username, password, NIC, jobrole, contactno, address, city
-    ];
-  
-      
-      const [result,field] = await connection.execute(sqlQuery, values);
-  
-      // Release the connection back to the pool
+      const sqlQuery = 'INSERT INTO user (Fullname, Email, Username, Password, NIC, JobRole, ContactNo, Address, City, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)';
+      const [result] = await connection.execute(sqlQuery, [Fullname, email, username, password, NIC, jobrole, contactno, address, city]);
       connection.release();
-  
-      return result.insertId; // Return the ID of the inserted user
+      return result.insertId;
     } catch (err) {
       throw err;
     }
@@ -62,7 +52,7 @@ const addUser = async (userData) => {
 
     const sqlQuery = 'DELETE FROM user WHERE ID = ?';
 
-    const [result, fields] = await connection.execute(sqlQuery,[id]);
+    const [result] = await connection.execute(sqlQuery,[id]);
     connection.release();
 
     return result.affectedRows;
@@ -87,7 +77,7 @@ const addUser = async (userData) => {
         values = [Fullname, email, username, NIC, jobrole, contactno, address, city, id];
       }
   
-      const [result, fields] = await connection.execute(sqlQuery, values);
+      const [result] = await connection.execute(sqlQuery, values);
       connection.release();
   
       return result.affectedRows;
