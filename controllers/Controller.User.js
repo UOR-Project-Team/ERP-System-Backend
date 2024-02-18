@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const userModel = require('../models/Model.user');
 const jwt = require('jsonwebtoken');
 const {hashPassword} = require('./controller.password');
