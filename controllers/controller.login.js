@@ -1,6 +1,6 @@
 const LoginModel = require('../models/model.login');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const {hashPassword} = require('./controller.password');
 
 const loginUser = async (req, res) => {
@@ -14,7 +14,7 @@ const loginUser = async (req, res) => {
             console.error('Error Authenticating User:', err);
             return res.status(500).json({ error: 'Error Authenticating User' });
           } else if (loginResult.length > 0) {
-            const storedHash = results[0].Password;
+            const storedHash = loginResult[0].Password;
     
             bcrypt.compare(password, storedHash, (compareErr, compareResult) => {
               if (compareErr) {
@@ -23,20 +23,19 @@ const loginUser = async (req, res) => {
               if (compareResult) {
                 console.log(compareResult)
                 const token = jwt.sign({
-                  userid : results[0].ID,
-                  username: results[0].Username,
-                  fullname: results[0].Fullname,
-                  email: results[0].Email,
-                  nic: results[0].NIC,
-                  jobrole: results[0].JobRole,
-                  contactno: results[0].ContactNo,
-                  address: results[0].Address,
-                  city: results[0].City,
-                  loginflag: results[0].Loginflag,
+                  userid : loginResult[0].ID,
+                  username: loginResult[0].Username,
+                  fullname: loginResult[0].Fullname,
+                  email: loginResult[0].Email,
+                  nic: loginResult[0].NIC,
+                  jobrole: loginResult[0].JobRole,
+                  contactno: loginResult[0].ContactNo,
+                  address: loginResult[0].Address,
+                  city: loginResult[0].City,
+                  loginflag: loginResult[0].Loginflag,
                 }, process.env.JWT_SECRET, {
                   expiresIn: '1h',
                 });
-
 
                 const updateResult = LoginModel.updateloginflag(username);
                   if (updateResult <= 0) {

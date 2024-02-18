@@ -2,8 +2,10 @@ const db = require('../connection');
 
 const getAllCustomers = async () => {
   try {
+    const connection = await db.getConnection();
     const query = 'SELECT ID, Title, Fullname, ContactNo FROM Customer';
-    const [results] = await db.execute(query);
+    const [results] = await connection.execute(query);
+    connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -12,29 +14,29 @@ const getAllCustomers = async () => {
 
 const getAllItems = async () => {
 try {
-   // const query = 'SELECT ID, Code, Name FROM Product';
+   const connection = await db.getConnection();
    const query = `SELECT 
-                      purchase_product.Product_ID AS ID, 
-                      purchase_product.Unit_Price, 
-                      product.Code AS Code,
-                      purchase_product.Barcode AS Barcode,
-                      product.Name AS Name, 
-                      SUM(purchase_item.Quantity) AS Total_Quantity
-                    FROM 
-                      purchase_product 
-                    JOIN 
-                      purchase_item ON purchase_product.Purchase_Item_ID = purchase_item.ID 
-                    JOIN 
-                      product ON purchase_product.Product_ID = product.ID 
-                    WHERE
-                      purchase_item.Quantity > 0
-                    GROUP BY 
-                      purchase_product.Product_ID 
+                  purchase_product.Product_ID AS ID, 
+                  MAX(purchase_product.Unit_Price), 
+                  product.Code AS Code,
+                  MAX(purchase_product.Barcode) AS Barcode,
+                  product.Name AS Name, 
+                  SUM(purchase_item.Quantity) AS Total_Quantity
+                FROM 
+                  purchase_product 
+                JOIN 
+                  purchase_item ON purchase_product.Purchase_Item_ID = purchase_item.ID 
+                JOIN 
+                  product ON purchase_product.Product_ID = product.ID 
+                WHERE
+                  purchase_item.Quantity > 0
+                GROUP BY 
+                  purchase_product.Product_ID 
                       
-     `;
+                 `;
      //purchase_product.Unit_Price;
-    const [results] = await db.execute( query );
-    //console.log(results);
+    const [results] = await connection.execute( query );
+    connection.release();
     return results;
 } catch (err) {
     throw err;
@@ -43,6 +45,7 @@ try {
 
 const getItemPriceById = async (barcode) =>{
     try{
+<<<<<<< HEAD
         const query = `SELECT
         Purchase_Product.id,
         Purchase_Product.Barcode,
@@ -60,6 +63,12 @@ const getItemPriceById = async (barcode) =>{
         //console.log("Result", results)
         
         
+=======
+      const connection = await db.getConnection();
+        const query = 'SELECT id,Barcode, Unit_Price FROM Purchase_Product where Product_ID = ?';
+        const [results] = await connection.execute(query, [ProductId]);
+        connection.release();
+>>>>>>> main
         return results;
     } catch (err){
         throw err;
@@ -122,6 +131,7 @@ const addinvoice = async(invoiceNo, customerid,userid, items, totalAmount)=>{
 
 const getAllInvoices = async () =>{
   try{
+    const connection = await db.getConnection();
       const query= `SELECT
                   invoice.*,
                   user.Fullname AS UserName,
@@ -134,7 +144,62 @@ const getAllInvoices = async () =>{
                   ORDER BY
                     invoice.ID;
                   `
-      const [results] = await db.execute(query);
+      const [results] = await connection.execute(query);
+      connection.release();
+      return results;
+  } catch (err){
+      throw err;
+  }
+}
+
+const getInvoiceByNo = async (invoiceNo)=>{
+  try{
+    const connection = await db.getConnection();
+    const query = `
+    SELECT
+      invoice.*,
+      user.Fullname AS UserName,
+      customer.Fullname AS CustomerName,
+      customer.ContactNo AS CustomerContact
+    FROM
+      invoice
+      JOIN user ON invoice.User_ID = user.ID
+      JOIN customer ON invoice.Customer_ID = customer.ID
+    WHERE
+      invoice.No = ?;
+  `;
+  
+    const [results] = await connection.execute(query, [invoiceNo]);
+    connection.release();
+    return results;
+} catch (err){
+    throw err;
+}
+}
+
+const getSalesItemsByNo = async (invoiceNo) =>{
+  try{
+    const connection = await db.getConnection();
+    const query = `
+    SELECT
+    P.Name AS ProductName,
+    P.Code,
+    PP.Unit_Price AS UnitPrice,
+    S.Quantity
+    FROM
+    Sale_Item S
+    JOIN
+    Purchase_Product PP ON S.Purchase_Product_ID = PP.ID
+    JOIN
+    Product P ON PP.Product_ID = P.ID
+    WHERE
+    S.Invoice_No = ?;
+
+
+  `;
+
+      const [results] = await connection.execute(query, [invoiceNo]);  
+      connection.release();
       return results;
   } catch (err){
       throw err;
@@ -143,4 +208,4 @@ const getAllInvoices = async () =>{
 
 
 
-module.exports = { getAllCustomers,  getAllItems , getItemPriceById,addinvoice, getAllInvoices };
+module.exports = { getAllCustomers,  getAllItems , getItemPriceById,addinvoice, getAllInvoices ,getInvoiceByNo , getSalesItemsByNo};

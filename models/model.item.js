@@ -2,9 +2,9 @@ const db = require('../connection');
 
   //Add item function when product table and supplier_product table is maintained separatly instead of adding supplier id in the product table
   const addItem = async (itemData) => {
-    const { code, itemName, categoryId, unitId, supplierId } = itemData;
-    const query = 'INSERT INTO product (Code, Name, Category_ID, Unit_ID) VALUES (?,?,?,?)';
-    const values = [code, itemName, categoryId, unitId];
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity } = itemData;
+    const query = 'INSERT INTO product (Code, Name, Category_ID, Unit_ID, Reorder_Level, Reorder_Quantity) VALUES (?,?,?,?,?,?)';
+    const values = [code, itemName, categoryId, unitId, reorderLevel, reorderQuantity];
     
     // Get a connection from the pool
     const connection = await db.getConnection();
@@ -40,22 +40,6 @@ const db = require('../connection');
       }
     }
   };
-
-
-
-  // const deleteItem = async (itemId) => {
-  //   try{
-  //     const query = 'DELETE FROM product WHERE ID = ?';
-  //     await db.query(query,[itemId]);
-  //   }
-  //   catch(err)
-  //   {
-  //     throw err;
-  //   }
-
-  // };
-
-
 
   const deleteItem = async (itemId) => {
 
@@ -93,32 +77,14 @@ const db = require('../connection');
 
   };
 
-
-  
-
-  // const updateItem = async (itemData,itemId) => {
-
-  //   try{
-  //     const { code, itemName, categoryId, unitId } = itemData;
-  //     const query = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
-  //     const values = [ code, itemName, categoryId, unitId, itemId ]
-  //     await db.query(query, values)
-
-  //   }
-  //   catch(err){
-  //     throw err;
-  //   }
-  // };
-
-
   const updateItem = async (itemData,itemId) => {
 
     const connection = await db.getConnection();
-    const query1 = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=? WHERE ID = ?';
+    const query1 = 'UPDATE product SET Code=?, Name=?, Category_ID=?,Unit_ID=?, Reorder_Level=?, Reorder_Quantity=?  WHERE ID = ?';
     const query2 = 'UPDATE supplier_product SET Supplier_ID=? WHERE Product_ID = ?';
 
-    const { code, itemName, categoryId, unitId, supplierId } = itemData;
-    const values1 = [ code, itemName, categoryId, unitId, itemId ]
+    const { code, itemName, categoryId, unitId, supplierId, reorderLevel, reorderQuantity } = itemData;
+    const values1 = [ code, itemName, categoryId, unitId, reorderLevel, reorderQuantity, itemId ]
     const values2 = [supplierId,itemId]
     console.log("update request reached model item");
     try{
@@ -155,6 +121,7 @@ const db = require('../connection');
 
 const getAllItems =  async () => {
   try {
+    const connection = await db.getConnection();
           const sql= `SELECT
                     product.*,
                     product_category.Description AS CategoryName,
@@ -170,8 +137,8 @@ const getAllItems =  async () => {
                 ORDER BY
                     product.code;
                 `
-    const [results] = await db.execute(sql);
-    
+    const [results] = await connection.execute(sql);
+    connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -180,6 +147,7 @@ const getAllItems =  async () => {
 
 const getAllItemsByUnitID =  async (unitId) => {
   try {
+    const connection = await db.getConnection();
     const sql = `
       SELECT
         product.*,
@@ -199,8 +167,8 @@ const getAllItemsByUnitID =  async (unitId) => {
         product.code;
     `;
     
-    const [results] = await db.execute(sql, [unitId]);
-    
+    const [results] = await connection.execute(sql, [unitId]);
+    connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -210,6 +178,7 @@ const getAllItemsByUnitID =  async (unitId) => {
 
 const getAllItemsByCategoryID =  async (categoryId) => {
   try {
+    const connection = await db.getConnection();
           const sql= `SELECT
                     product.*,
                     product_category.Description AS CategoryName,
@@ -227,8 +196,8 @@ const getAllItemsByCategoryID =  async (categoryId) => {
                 ORDER BY
                     product.code;
                 `
-                const [results] = await db.execute(sql, [categoryId]);
-    
+                const [results] = await connection.execute(sql, [categoryId]);
+                connection.release();
     return results;
   } catch (err) {
     throw err;
@@ -237,6 +206,7 @@ const getAllItemsByCategoryID =  async (categoryId) => {
 
 const getAllItemsBySupplierID =  async (supplierId) => {
   try {
+    const connection = await db.getConnection();
           const sql= `SELECT
                     product.*,
                     product_category.Description AS CategoryName,
@@ -254,8 +224,8 @@ const getAllItemsBySupplierID =  async (supplierId) => {
                 ORDER BY
                     product.code;
                 `
-                const [results] = await db.execute(sql, [supplierId]);
-    
+                const [results] = await connection.execute(sql, [supplierId]);
+                connection.release();
     return results;
   } catch (err) {
     throw err;
