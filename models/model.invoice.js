@@ -41,10 +41,23 @@ try {
 }
 };
 
-const getItemPriceById = async (ProductId) =>{
+const getItemPriceById = async (barcode) =>{
     try{
-        const query = 'SELECT id,Barcode, Unit_Price FROM Purchase_Product where Product_ID = ?';
-        const [results] = await db.execute(query, [ProductId]);
+        const query = `SELECT
+        Purchase_Product.id,
+        Purchase_Product.Barcode,
+        Purchase_Product.Unit_Price,
+        purchase_item.Purchase_Price
+    FROM
+        Purchase_Product
+    JOIN
+        purchase_item ON Purchase_Product.purchase_item_ID = purchase_item.ID
+    WHERE
+        Purchase_Product.Barcode = ?`;
+    
+        const [results] = await db.execute(query, [barcode]);
+
+        //console.log("Result", results)
         
         
         return results;
@@ -69,10 +82,11 @@ const addinvoice = async(invoiceNo, customerid,userid, items, totalAmount)=>{
     }
 
     for(const item of items){
-      const {quantity, productId , s_price, barcode} = item;
+      const {quantity, productId , s_price,p_price, barcode} = item;
 
-      const saleQuery = 'INSERT INTO Sale_Item (Invoice_NO, Quantity, Unit_Price, Purchase_Product_ID, Barcode_No) VALUES(?, ?, ?, ?, ?)';
-      const [saleResult] = await connection.execute(saleQuery, [invoiceNo, quantity, s_price, productId, barcode])
+      const saleQuery = 'INSERT INTO Sale_Item (Invoice_NO, Quantity, Unit_Price,Purchase_Price, Purchase_Product_ID, Barcode_No) VALUES(?, ?, ?, ?, ?, ?)';
+      const [saleResult] = await connection.execute(saleQuery, [invoiceNo, quantity, s_price,p_price, productId, barcode])
+      //console.log("Sale Result", saleResult)
       
       if(saleResult.insertId<0){
         throw new Error('Error inserting Sale_Item data');

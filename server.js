@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const session = require('express-session');
+
 
 const userroute = require('./routes/Router.User')
 const categoryRoutes = require('./routes/route.category');
@@ -12,25 +12,12 @@ const customerRoute = require('./routes/route.customer');
 const grnRoute = require('./routes/route.grn');
 const dashboardRoute = require('./routes/route.dashboard');
 const invoiceRoute = require('./routes/route.invoice')
-const reportRoute = require('./routes/route.report');
+const reportRoute = require('./routes/route.reports');
+
 
 require('dotenv').config();
 const app = express();
 app.use(cors());
-
-
-const crypto = require('crypto');
-const randomSessionSecret = crypto.randomBytes(32).toString('hex');
-console.log(randomSessionSecret);
-
-
-app.use(
-  session({
-    secret: randomSessionSecret,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 
 app.use(express.json());
@@ -44,7 +31,8 @@ app.use('/unit', unitRoute);
 app.use('/grn', grnRoute);
 app.use('/dashboard', dashboardRoute);
 app.use('/invoice', invoiceRoute);
-app.use('/report', reportRoute)
+app.use('/report', reportRoute);
+
 
 // Configuration
 const port = process.env.PORT || 8081;
