@@ -55,7 +55,7 @@ const getItemsById = async (req, res) => {
 
       const { grnNo, supplierid,userid, puchaseditems, totalAmount } = req.body;
 
-      console.log('received')
+      //console.log('received')
       if (!grnNo || !supplierid || !userid || !Array.isArray(puchaseditems) || isNaN(totalAmount)) {
         //console.log('test 1')
         return res.status(400).json({ error: 'Invalid or missing parameters' });

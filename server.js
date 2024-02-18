@@ -1,15 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-// Load environment variables from .env file
-require('dotenv').config();
 
-const app = express();
-
-// Middleware
-app.use(cors());
-
-// Routes
 const userroute = require('./routes/Router.User')
 const categoryRoutes = require('./routes/route.category');
 const loginRoute = require('./routes/route.login');
@@ -19,7 +11,14 @@ const unitRoute = require('./routes/route.unit');
 const customerRoute = require('./routes/route.customer');
 const grnRoute = require('./routes/route.grn');
 const dashboardRoute = require('./routes/route.dashboard');
-const invoiceRoute = require('./routes/route.invoice');
+const invoiceRoute = require('./routes/route.invoice')
+const reportRoute = require('./routes/route.reports');
+
+
+require('dotenv').config();
+const app = express();
+app.use(cors());
+
 
 app.use(express.json());
 app.use('/',loginRoute)
@@ -32,6 +31,8 @@ app.use('/unit', unitRoute);
 app.use('/grn', grnRoute);
 app.use('/dashboard', dashboardRoute);
 app.use('/invoice', invoiceRoute);
+app.use('/report', reportRoute);
+
 
 // Configuration
 const port = process.env.PORT || 8081;
