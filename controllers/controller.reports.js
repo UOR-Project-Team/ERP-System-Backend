@@ -2,7 +2,11 @@ const reportModel = require('../models/model.reports')
 
 const profitandloss = async(req, res)=>{
     try{
-    const {startDate, endDate} = req.body;
+        console.log("req body", req.body)
+    //const {startDate, endDate} = req.body;
+    const startDate = req.query.startDate
+    const endDate = req.query.endDate
+    console.log("Date", startDate, endDate);
 
     const { total_sale, total_cost, profit_loss } = await reportModel.calcProfitLoss(startDate,endDate);
     //console.log("Result is", result)
