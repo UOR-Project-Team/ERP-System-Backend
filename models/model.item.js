@@ -232,4 +232,42 @@ const getAllItemsBySupplierID =  async (supplierId) => {
   }
 };
 
-module.exports = { addItem, deleteItem, updateItem, getAllItems, getAllItemsByUnitID, getAllItemsByCategoryID, getAllItemsBySupplierID };
+
+
+// Assuming you have set up your MySQL connection
+
+// Function to generate unique product code
+const getProductCode = async ()=> {
+  try {
+      // Query to get the highest existing product code
+      const query = "SELECT MAX(Code) AS maxCode FROM product";
+      const result = await db.query(query);
+
+      let maxCode = result[0][0].maxCode;
+
+      let newCode = "P001"; // Default starting code
+
+      if (maxCode) {
+          // Extract the numeric part and increment
+          const numericPart = parseInt(maxCode.slice(1), 10);
+          newCode = "P" + ("000" + (numericPart + 1)).slice(-3); // Increment and format
+      }
+
+      // Check if the generated code already exists
+      const codeExistsQuery = "SELECT COUNT(*) AS count FROM product WHERE Code = ?";
+      const codeExistsResult = await db.query(codeExistsQuery, [newCode]);
+
+      if (codeExistsResult[0].count > 0) {
+          // If code already exists, recursively call the function again
+          return getProductCode();
+      }
+
+      return newCode;
+  } catch (error) {
+      throw new Error("Error generating product code: " + error.message);
+  }
+}
+
+
+
+module.exports = { addItem, deleteItem, updateItem, getAllItems, getAllItemsByUnitID, getAllItemsByCategoryID, getAllItemsBySupplierID, getProductCode };
