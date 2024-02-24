@@ -30,10 +30,15 @@ const getAllItems = async (req, res) => {
       res.status(500).json({ error: 'Error occured while read!' });
     }
   };
+
   const getItemPriceById = async (req, res) => {
     try {
-      const ProductId = req.params.id;
-      const data = await invoiceModel.getItemPriceById(ProductId);
+      //console.log("body ", req.body)
+      const {barcode} = req.body;
+
+      //console.log("barcode is", barcode)
+      const data = await invoiceModel.getItemPriceById(barcode);
+      //console.log("data is", data)
   
       if (!data) {
         return res.status(404).json({ error: 'Items not found!' });
@@ -42,7 +47,7 @@ const getAllItems = async (req, res) => {
       res.status(200).json(data);
 
     } catch (err) {
-      console.error('Error fetching items:', err);
+      //console.error('Error fetching items:', err);
       res.status(500).json({ error: 'Error occured while read!' });
     }
   };
