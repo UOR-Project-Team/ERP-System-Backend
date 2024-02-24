@@ -1,3 +1,4 @@
+const { Product } = require('xero-node/dist/gen/model/appstore/product');
 const db = require('../connection');
 
 const calcProfitLoss = async(startDate, enddate)=>{
@@ -19,12 +20,12 @@ const calcProfitLoss = async(startDate, enddate)=>{
         total_sale += parseFloat(arr.Unit_Price);
         total_cost += parseFloat(arr.Purchase_Price);
     }
-    console.log("Total Sale : ", total_sale);
-    console.log("Total Cost : ", total_cost);
+    //console.log("Total Sale : ", total_sale);
+    //console.log("Total Cost : ", total_cost);
 
     const Profit_loss = total_sale - total_cost;
 
-    console.log("Net Profit : ", Profit_loss);
+    //console.log("Net Profit : ", Profit_loss);
 
 
     return {
@@ -67,4 +68,21 @@ const StockMomentReport = async()=>{
     }
 }
 
-module.exports = {calcProfitLoss, StockMomentReport}
+const saleItemreport = async(productId)=>{
+    try{
+        const connection = await db.getConnection();
+        const saleQuery = '';
+
+        const [saleresults] = await connection.execute(stockQuery);
+        connection.release();
+
+        return salekresults
+
+
+    }catch(error){
+        console.log("Error Reporting Model", error)
+        throw error;
+    }
+}
+
+module.exports = {calcProfitLoss, StockMomentReport, saleItemreport}

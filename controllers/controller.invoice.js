@@ -47,7 +47,7 @@ const getAllItems = async (req, res) => {
       res.status(200).json(data);
 
     } catch (err) {
-      console.error('Error fetching items:', err);
+      //console.error('Error fetching items:', err);
       res.status(500).json({ error: 'Error occured while read!' });
     }
   };

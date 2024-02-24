@@ -13,6 +13,7 @@ const grnRoute = require('./routes/route.grn');
 const dashboardRoute = require('./routes/route.dashboard');
 const invoiceRoute = require('./routes/route.invoice')
 const reportRoute = require('./routes/route.reports');
+const widgetRoute = require('./routes/route.widgets')
 
 
 require('dotenv').config();
@@ -32,6 +33,7 @@ app.use('/grn', grnRoute);
 app.use('/dashboard', dashboardRoute);
 app.use('/invoice', invoiceRoute);
 app.use('/report', reportRoute);
+app.use('/widget', widgetRoute)
 
 
 // Configuration

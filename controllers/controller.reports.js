@@ -6,11 +6,12 @@ const profitandloss = async(req, res)=>{
 
     const { total_sale, total_cost, profit_loss } = await reportModel.calcProfitLoss(startDate,endDate);
     //console.log("Result is", result)
-    if(!total_cost && !total_sale){
+    if(!total_cost || !total_sale){
         res.status(400).json({ message: 'Invoice Data Not exits' });
     }
 
-    res.status(200).json({
+    res.status(200)
+    res.json({
                 total_sale: total_sale,
                 total_cost: total_cost,
                 profit_loss: profit_loss
@@ -18,7 +19,7 @@ const profitandloss = async(req, res)=>{
     
 
     }catch(error){
-        console.log("Error Reporting", error);
+        //console.error("Error Reporting", error);
         res.status(500).json({ message: 'Internel Server error' });
     }
 
@@ -27,7 +28,9 @@ const profitandloss = async(req, res)=>{
 const StockMoment = async(req, res)=>{
     try{
         const stockReport = await reportModel.StockMomentReport();
-
+        if(!stockReport){
+            res.status(404).json({message: 'Error calculation Stock'})
+        }
         res.status(200).json(stockReport);
 
     }catch(error){
@@ -36,4 +39,14 @@ const StockMoment = async(req, res)=>{
     }
 }
 
-module.exports = {profitandloss, StockMoment}
+const saleitemController = async (req, res)=>{
+    try{
+        const productId = req.params.productId
+        const saleitemresult = await reportModel.saleItemreport(productId)
+    }catch(error){
+        console.log("Error Reporting", error);
+        res.status(500).json({ message: 'Internel Server error' });
+    }
+}
+
+module.exports = {profitandloss, StockMoment, saleitemController}
