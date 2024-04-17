@@ -3,7 +3,7 @@ const reportController = require('../controllers/controller.reports');
 const reportModel = require('../models/model.reports');
 
 const req = {
-  body: {
+  query: {
     startDate: '2024-01-01',
     endDate: '2024-02-01',
   },

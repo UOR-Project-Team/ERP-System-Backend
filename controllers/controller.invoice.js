@@ -10,7 +10,7 @@ const getCustomers = async (req, res) => {
         res.status(404).json({ message: 'No customer found' });
       }
   } catch (err) {
-    console.error('Error fetching all customer:', err);
+    //console.error('Error fetching all customer:', err);
     res.status(500).json({ error: 'Error occured while read!' });
   }
 };

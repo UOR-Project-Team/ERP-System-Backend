@@ -16,6 +16,7 @@ const calcProfitLoss = async(startDate, enddate)=>{
 
     let total_sale = 0
     let total_cost = 0
+
     for(const arr of results){
         total_sale += parseFloat(arr.Unit_Price);
         total_cost += parseFloat(arr.Purchase_Price);
@@ -23,7 +24,7 @@ const calcProfitLoss = async(startDate, enddate)=>{
     //console.log("Total Sale : ", total_sale);
     //console.log("Total Cost : ", total_cost);
 
-    const Profit_loss = total_sale - total_cost;
+    let Profit_loss = total_sale - total_cost;
 
     //console.log("Net Profit : ", Profit_loss);
 
@@ -31,7 +32,7 @@ const calcProfitLoss = async(startDate, enddate)=>{
     return {
         total_sale: total_sale,
         total_cost: total_cost,
-        profit_loss: Profit_loss
+        profit_loss: Profit_loss,
     };
 
     }catch(error){
@@ -68,21 +69,21 @@ const StockMomentReport = async()=>{
     }
 }
 
-const saleItemreport = async(productId)=>{
-    try{
-        const connection = await db.getConnection();
-        const saleQuery = '';
+// const saleItemreport = async(productId)=>{
+//     try{
+//         const connection = await db.getConnection();
+//         const saleQuery = '';
 
-        const [saleresults] = await connection.execute(stockQuery);
-        connection.release();
+//         const [saleresults] = await connection.execute(stockQuery);
+//         connection.release();
 
-        return salekresults
+//         return salekresults
 
 
-    }catch(error){
-        console.log("Error Reporting Model", error)
-        throw error;
-    }
-}
+//     }catch(error){
+//         console.log("Error Reporting Model", error)
+//         throw error;
+//     }
+// }
 
-module.exports = {calcProfitLoss, StockMomentReport, saleItemreport}
+module.exports = {calcProfitLoss, StockMomentReport}

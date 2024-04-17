@@ -158,7 +158,9 @@ const config = {
   //   "**/__tests__/**/*.[jt]s?(x)",
   //   "**/?(*.)+(spec|test).[tj]s?(x)"
   // ],
-
+  testMatch: [
+    "**/Test/**/*.[jt]s?(x)",  // Match files in the Test folder with .js, .jsx, .ts, .tsx extensions
+  ],
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
   //   "\\\\node_modules\\\\"
@@ -181,7 +183,9 @@ const config = {
   //   "\\\\node_modules\\\\",
   //   "\\.pnp\\.[^\\\\]+$"
   // ],
-
+  testPathIgnorePatterns: [
+    "/Test/model.invoice.test.js",  // Specify the path to the test file to be ignored
+  ],
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
 
