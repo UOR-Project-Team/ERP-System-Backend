@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+// module.exports = {
+//     testEnvironment: 'node',
+//     testMatch: ['**/*.test.js'],
+//   };
+  
+=======
 /**
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
@@ -196,3 +203,4 @@ const config = {
 };
 
 module.exports = config;
+>>>>>>> main
